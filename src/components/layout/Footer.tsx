@@ -13,13 +13,8 @@ export default function Footer() {
           
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <Link href="/" className="inline-block mb-6 relative w-[120px] h-[40px]">
-              <Image 
-                src="/logo.png" 
-                alt="Digilo" 
-                fill 
-                className="object-contain object-left" 
-              />
+            <Link href="/" className="inline-flex items-baseline gap-[1px] mb-6 text-2xl md:text-3xl font-black tracking-tighter">
+              DIGIL<span className="text-accent text-3xl md:text-4xl leading-none">O</span>
             </Link>
             <p className="text-foreground/60 font-medium max-w-xs">
               AI Automation. Software. Scale.
