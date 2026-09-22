@@ -23,6 +23,25 @@ const services = [
     title: "Bulk Contracts",
     description: "Recurring project requirements, agency-to-agency collaboration, and dedicated project teams.",
   },
+  {
+    id: "05",
+    title: "AI & Automation",
+    description: "Automate repetitive work, connect your tools, and build intelligent workflows that help your business move faster.",
+    visual: (
+      <div className="flex items-center gap-3 mt-4 text-accent opacity-80">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="animate-[pulse_3s_ease-in-out_infinite]">
+          <rect x="2" y="14" width="6" height="6" rx="1" />
+          <rect x="16" y="14" width="6" height="6" rx="1" />
+          <rect x="9" y="4" width="6" height="6" rx="1" />
+          <path d="M5 14v-2a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2" className="animate-[dash_2s_linear_infinite]" style={{ strokeDasharray: '4', strokeDashoffset: '0' }} />
+          <path d="M12 10V10" />
+        </svg>
+        <div className="h-[1px] w-8 bg-accent/50 relative overflow-hidden">
+          <div className="absolute top-0 left-0 h-full w-full bg-accent animate-[translateX_2s_linear_infinite] -translate-x-full"></div>
+        </div>
+      </div>
+    )
+  },
 ];
 
 export default function Services() {
@@ -56,9 +75,10 @@ export default function Services() {
               </div>
               
               <div className={`mt-6 md:mt-0 md:max-w-md overflow-hidden transition-all duration-500 ease-in-out ${
-                hovered === service.id ? 'opacity-100 max-h-40 md:translate-x-0' : 'opacity-60 max-h-20 md:opacity-0 md:translate-x-8'
+                hovered === service.id ? 'opacity-100 max-h-60 md:translate-x-0' : 'opacity-60 max-h-20 md:opacity-0 md:translate-x-8'
               }`}>
                 <p className="text-foreground/80 text-lg">{service.description}</p>
+                {'visual' in service && service.visual}
               </div>
             </div>
           ))}

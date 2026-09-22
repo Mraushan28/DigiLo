@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Digilo — Digital Agency for Design, Video & Web Development",
-  description: "Digilo is a digital agency delivering graphic design, video editing, web development and scalable project solutions for businesses and brands.",
+  title: "Digilo — Digital Agency for Design, Video, Web & AI Automation",
+  description: "Digilo is a digital agency delivering graphic design, video editing, web development, AI & automation, and scalable project solutions for businesses and brands.",
 };
 
 export default function RootLayout({

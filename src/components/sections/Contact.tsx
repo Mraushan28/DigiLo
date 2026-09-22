@@ -140,6 +140,7 @@ export default function Contact() {
                     <option value="Video Editing" className="bg-background">Video Editing</option>
                     <option value="Web Development" className="bg-background">Web Development</option>
                     <option value="Bulk Contract" className="bg-background">Bulk Project Contract</option>
+                    <option value="AI & Automation" className="bg-background">AI & Automation</option>
                     <option value="Other" className="bg-background">Other</option>
                   </select>
                 </div>

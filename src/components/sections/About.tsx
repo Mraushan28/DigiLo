@@ -30,6 +30,7 @@ export default function About() {
                     <li>Graphic Design</li>
                     <li>Video Editing</li>
                     <li>Web Development</li>
+                    <li>AI & Automation</li>
                     <li>Scalable/Bulk Delivery</li>
                   </ul>
                 </div>

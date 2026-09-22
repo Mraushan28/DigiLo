@@ -7,7 +7,7 @@ export default function TermsPage() {
         <p>These Terms of Service govern your use of the Digilo website and the digital agency services we provide.</p>
         {/* Placeholder for actual terms content */}
         <h2>Services</h2>
-        <p>Digilo provides graphic design, video editing, web development, and bulk project contracts as described on this website.</p>
+        <p>Digilo provides graphic design, video editing, web development, AI & automation, and bulk project contracts as described on this website.</p>
       </div>
     </div>
   );
