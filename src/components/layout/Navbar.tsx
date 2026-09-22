@@ -56,13 +56,15 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden md:flex items-center">
-          <Link
-            href="#contact"
+          <a
+            href="https://wa.me/917707052307?text=Hi%20Digilo%2C%20I'd%20like%20to%20discuss%20a%20project."
+            target="_blank"
+            rel="noopener noreferrer"
             className="group flex items-center gap-3 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:text-accent transition-colors duration-300"
           >
-            Start a Project
+            WHATSAPP US
             <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
+          </a>
         </div>
 
         {/* Mobile Toggle */}
@@ -92,13 +94,15 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          <Link
-            href="#contact"
+          <a
+            href="https://wa.me/917707052307?text=Hi%20Digilo%2C%20I'd%20like%20to%20discuss%20a%20project."
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setMobileMenuOpen(false)}
-            className="text-accent mt-8 flex items-center gap-3 text-lg"
+            className="text-accent mt-8 flex items-center gap-3 text-lg font-bold uppercase tracking-widest"
           >
-            Start a Project <ArrowRight className="w-6 h-6" />
-          </Link>
+            WHATSAPP US <ArrowRight className="w-6 h-6" />
+          </a>
         </nav>
       </div>
     </header>
