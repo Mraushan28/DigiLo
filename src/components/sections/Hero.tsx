@@ -8,7 +8,7 @@ export default function Hero() {
       <div className="text-center z-10 w-full max-w-7xl mx-auto flex flex-col items-center">
         
         {/* Animated Workflow Visual */}
-        <div className="relative w-full max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between mb-16 px-4 py-8 border border-foreground/10 bg-foreground/5 rounded-2xl overflow-hidden">
+        <div className="relative w-full max-w-4xl mx-auto flex flex-row items-center justify-between mb-16 px-2 md:px-4 py-6 md:py-8 border border-foreground/10 bg-foreground/5 rounded-2xl overflow-hidden">
           <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)', backgroundSize: '1rem 1rem' }}></div>
           
           <WorkflowNode label="FORM" icon="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -43,11 +43,11 @@ export default function Hero() {
 
 function WorkflowNode({ label, icon, highlight = false }: { label: string, icon: string, highlight?: boolean }) {
   return (
-    <div className={`relative z-10 flex flex-col items-center justify-center p-4 md:p-6 rounded-xl border ${highlight ? 'border-accent bg-accent/10 shadow-[0_0_30px_rgba(204,255,0,0.15)]' : 'border-foreground/20 bg-background'} transition-all`}>
-      <svg className={`w-8 h-8 md:w-12 md:h-12 mb-3 ${highlight ? 'text-accent' : 'text-foreground/70'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+    <div className={`relative z-10 flex flex-col items-center justify-center p-2 sm:p-3 md:p-6 rounded-xl border ${highlight ? 'border-accent bg-accent/10 shadow-[0_0_30px_rgba(204,255,0,0.15)]' : 'border-foreground/20 bg-background'} transition-all`}>
+      <svg className={`w-5 h-5 sm:w-6 sm:h-6 md:w-12 md:h-12 mb-1 sm:mb-2 md:mb-3 ${highlight ? 'text-accent' : 'text-foreground/70'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
       </svg>
-      <span className={`text-[10px] md:text-xs font-bold tracking-widest uppercase ${highlight ? 'text-accent' : 'text-foreground/70'}`}>
+      <span className={`text-[8px] sm:text-[10px] md:text-xs font-bold tracking-widest uppercase ${highlight ? 'text-accent' : 'text-foreground/70'}`}>
         {label}
       </span>
     </div>
@@ -56,7 +56,7 @@ function WorkflowNode({ label, icon, highlight = false }: { label: string, icon:
 
 function WorkflowConnector() {
   return (
-    <div className="hidden md:flex flex-1 items-center justify-center relative px-2">
+    <div className="flex flex-1 items-center justify-center relative px-1 sm:px-2">
       <div className="h-[2px] w-full bg-foreground/10 relative overflow-hidden">
         <motion.div 
           className="absolute top-0 left-0 h-full w-1/2 bg-accent"
@@ -64,7 +64,7 @@ function WorkflowConnector() {
           transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
         />
       </div>
-      <div className="absolute right-0 w-2 h-2 rounded-full bg-foreground/20"></div>
+      <div className="absolute right-0 w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-foreground/20"></div>
     </div>
   );
 }
