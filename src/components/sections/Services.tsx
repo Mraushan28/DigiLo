@@ -19,26 +19,28 @@ export default function Services() {
             <div className="lg:w-1/3">
               <span className="text-xl md:text-3xl font-mono text-accent mb-4 block">01</span>
               <h3 className="text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tighter leading-none text-accent">
-                AI<br/>AUTOMATION
+                DIGILO AI<br/>AUTOMATION
               </h3>
             </div>
             <div className="lg:w-2/3">
               <h4 className="text-2xl md:text-4xl font-bold uppercase tracking-tight mb-6">
-                TURN REPETITIVE WORK INTO AUTOMATED SYSTEMS.
+                AUTOMATE. INTEGRATE. GROW.
               </h4>
               <p className="text-xl md:text-2xl text-foreground/80 font-medium mb-12 max-w-3xl">
                 From lead generation to internal operations, Digilo builds AI-powered workflows that connect your tools, eliminate repetitive tasks and help your team focus on higher-value work.
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-foreground/20">
-                <ServiceDetail title="AI WORKFLOW AUTOMATION" desc="Automate repetitive business processes using AI and workflow platforms." />
-                <ServiceDetail title="LEAD AUTOMATION" desc="Capture, qualify, enrich and route leads automatically." />
-                <ServiceDetail title="AI CHATBOTS & ASSISTANTS" desc="Build AI-powered assistants for customer support, sales and internal teams." />
-                <ServiceDetail title="CRM AUTOMATION" desc="Automatically update, organize and manage customer data." />
-                <ServiceDetail title="EMAIL & COMMUNICATION" desc="Automate personalized emails, notifications and follow-ups." />
-                <ServiceDetail title="DATA AUTOMATION" desc="Collect, transform, analyze and move data between systems automatically." />
-                <ServiceDetail title="API & TOOL INTEGRATION" desc="Connect CRMs, websites, databases, payment systems and third-party tools." />
-                <ServiceDetail title="CUSTOM AI SOLUTIONS" desc="Build custom AI workflows around a company's specific business process." />
+                <ServiceDetail title="AI Agents" desc="Intelligent agents designed to handle specific tasks and operations autonomously." />
+                <ServiceDetail title="WhatsApp Automation" desc="Automate customer interactions, notifications, and sales flows directly on WhatsApp." />
+                <ServiceDetail title="AI Voice Agents" desc="Deploy conversational AI voice agents for inbound and outbound calls." />
+                <ServiceDetail title="Lead & Sales Automation" desc="Capture, qualify, enrich and route leads automatically." />
+                <ServiceDetail title="CRM Automation" desc="Automatically update, organize and manage customer data." />
+                <ServiceDetail title="Customer Support Automation" desc="Build AI-powered assistants for 24/7 customer support and issue resolution." />
+                <ServiceDetail title="Business Workflow Automation" desc="Connect your tools and eliminate repetitive manual tasks across your organization." />
+                <ServiceDetail title="AI Data & Document Processing" desc="Extract, transform, and analyze data from documents automatically." />
+                <ServiceDetail title="E-commerce Automation" desc="Streamline order processing, inventory updates, and customer communications." />
+                <ServiceDetail title="Custom AI Solutions" desc="Build custom AI workflows around your specific business processes." />
               </div>
             </div>
           </div>
@@ -79,6 +81,31 @@ export default function Services() {
             </div>
           </div>
           
+          {/* Packages */}
+          <div className="mt-16 mb-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="p-8 border border-foreground/20 bg-background flex flex-col">
+              <h5 className="text-xl font-bold uppercase tracking-tight mb-2">Starter</h5>
+              <div className="text-accent font-mono text-lg mb-6">₹5,000–₹12,000</div>
+              <p className="text-foreground/70 font-medium flex-grow mb-8">One simple automation.</p>
+              <div className="text-xs font-bold uppercase tracking-widest text-foreground/40 border-t border-foreground/10 pt-4">Maintenance & support billed separately</div>
+            </div>
+            
+            <div className="p-8 border border-accent/50 bg-accent/5 flex flex-col relative">
+              <div className="absolute top-0 right-0 bg-accent text-background text-[10px] font-bold uppercase tracking-widest px-3 py-1">Popular</div>
+              <h5 className="text-xl font-bold uppercase tracking-tight mb-2">Business</h5>
+              <div className="text-accent font-mono text-lg mb-6">₹15,000–₹40,000</div>
+              <p className="text-foreground/70 font-medium flex-grow mb-8">Multiple workflows + AI + integrations.</p>
+              <div className="text-xs font-bold uppercase tracking-widest text-foreground/40 border-t border-foreground/10 pt-4">Maintenance & support billed separately</div>
+            </div>
+            
+            <div className="p-8 border border-foreground/20 bg-background flex flex-col">
+              <h5 className="text-xl font-bold uppercase tracking-tight mb-2">Custom</h5>
+              <div className="text-accent font-mono text-lg mb-6">₹40,000+</div>
+              <p className="text-foreground/70 font-medium flex-grow mb-8">Complete business automation system.</p>
+              <div className="text-xs font-bold uppercase tracking-widest text-foreground/40 border-t border-foreground/10 pt-4">Maintenance & support billed separately</div>
+            </div>
+          </div>
+
           <div className="mt-12 text-center p-12 bg-accent/10 border border-accent/20">
             <h4 className="text-2xl font-bold uppercase tracking-tight mb-4 text-accent">WHAT SHOULD WE AUTOMATE?</h4>
             <p className="text-foreground/80 mb-8 max-w-xl mx-auto">
