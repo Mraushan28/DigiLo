@@ -52,16 +52,16 @@ export default function Home() {
         <About />
 
         {/* CLIENTS SECTION */}
-        <section className="py-24 px-6 border-t border-background/10 bg-foreground text-background">
+        <section className="py-24 px-6 border-t border-foreground/10 bg-background text-foreground">
           <div className="container mx-auto max-w-5xl">
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-background/40 mb-16 text-center">
+            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-foreground/40 mb-16 text-center">
               Selected Collaborations
             </h2>
             <div className="flex flex-wrap justify-center items-center gap-12 md:gap-32">
-              <span className="text-2xl md:text-4xl font-bold tracking-tighter uppercase text-background/60 hover:text-background transition-colors duration-300 cursor-default">
+              <span className="text-2xl md:text-4xl font-bold tracking-tighter uppercase text-foreground/60 hover:text-foreground transition-colors duration-300 cursor-default">
                 NextOdyssey
               </span>
-              <span className="text-2xl md:text-4xl font-bold tracking-tighter uppercase text-background/60 hover:text-background transition-colors duration-300 cursor-default">
+              <span className="text-2xl md:text-4xl font-bold tracking-tighter uppercase text-foreground/60 hover:text-foreground transition-colors duration-300 cursor-default">
                 Amulya Academy
               </span>
             </div>
@@ -69,7 +69,7 @@ export default function Home() {
         </section>
 
         {/* BULK CONTRACTS CTA */}
-        <section className="py-40 px-6 bg-foreground text-background text-center relative overflow-hidden group border-t border-background/10">
+        <section className="py-40 px-6 bg-background text-foreground text-center relative overflow-hidden group border-t border-foreground/10">
           <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.03)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%] group-hover:bg-[position:100%_100%] transition-all duration-[4s] ease-out"></div>
           
           {/* Subtle grid pattern background to represent workflow */}
@@ -80,7 +80,7 @@ export default function Home() {
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter uppercase mb-8 leading-[0.9]">
               NEED MORE DELIVERY CAPACITY?
             </h2>
-            <p className="text-lg md:text-xl mb-12 opacity-70 max-w-2xl font-medium">
+            <p className="text-lg md:text-xl mb-12 text-foreground/70 max-w-2xl font-medium">
               Digilo works with companies and agencies that need reliable development and automation capacity for recurring or high-volume projects.
             </p>
             <a 
