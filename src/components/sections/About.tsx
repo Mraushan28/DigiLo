@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <section id="about" className="py-32 px-6 bg-foreground text-background scroll-mt-20">
+    <section id="about" className="py-32 px-6 bg-background text-foreground scroll-mt-20 border-t border-foreground/10">
       <div className="container mx-auto max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-start">
           
@@ -19,23 +19,22 @@ export default function About() {
             </h3>
             
             <div className="max-w-2xl">
-              <p className="text-lg md:text-2xl text-background/80 font-medium mb-8">
+              <p className="text-lg md:text-2xl text-foreground/80 font-medium mb-8">
                 Digilo is an AI automation and development agency helping businesses automate repetitive processes, build digital products and scale their technology operations.
               </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 border-t border-background/20 pt-16">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 border-t border-foreground/20 pt-16">
                 <div>
                   <h4 className="text-xl font-bold uppercase tracking-tight mb-4">What we do</h4>
-                  <ul className="space-y-3 text-background/70 font-medium">
+                  <ul className="space-y-3 text-foreground/70 font-medium">
                     <li>AI Automation</li>
-                    <li>Website Development</li>
-                    <li>App Development</li>
+                    <li>Software Development</li>
                     <li>Bulk Project Contracts</li>
                   </ul>
                 </div>
                 <div>
                   <h4 className="text-xl font-bold uppercase tracking-tight mb-4">Our Approach</h4>
-                  <p className="text-background/70 font-medium leading-relaxed">
+                  <p className="text-foreground/70 font-medium leading-relaxed">
                     We believe in pushing the boundaries of digital aesthetics while maintaining robust, production-ready technical standards. No fluff, just results.
                   </p>
                 </div>

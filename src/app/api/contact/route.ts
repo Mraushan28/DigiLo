@@ -4,9 +4,9 @@ import { Resend } from "resend";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, company, email, phone, service, budget, message, automationGoal, currentTools, mainGoal } = body;
+    const { name, company, email, phone, service, budget, message, automationGoal, currentTools, mainGoal, softwareGoal } = body;
 
-    if (!name || !email || (!message && !automationGoal)) {
+    if (!name || !email || (!message && !automationGoal && !softwareGoal)) {
       return NextResponse.json(
         { error: "Name, email, and message are required." },
         { status: 400 }
@@ -14,10 +14,10 @@ export async function POST(req: Request) {
     }
 
     if (!process.env.RESEND_API_KEY || !process.env.CONTACT_EMAIL) {
-      console.warn("Missing RESEND_API_KEY or CONTACT_EMAIL in environment variables. Simulating successful email send for testing.");
+      console.error("Missing RESEND_API_KEY or CONTACT_EMAIL in environment variables.");
       return NextResponse.json(
-        { message: "Message sent successfully. We'll get back to you shortly." },
-        { status: 200 }
+        { error: "Server configuration error. Email service is unavailable." },
+        { status: 500 }
       );
     }
 
@@ -34,6 +34,7 @@ export async function POST(req: Request) {
       ${automationGoal ? `<p><strong>Automation Goal:</strong> ${automationGoal}</p>` : ""}
       ${currentTools ? `<p><strong>Current Tools:</strong> ${currentTools}</p>` : ""}
       ${mainGoal ? `<p><strong>Main Goal:</strong> ${mainGoal}</p>` : ""}
+      ${softwareGoal ? `<p><strong>Software Goal:</strong> ${softwareGoal}</p>` : ""}
       <p><strong>Submission Date:</strong> ${new Date().toLocaleString()}</p>
       <p><strong>Source:</strong> Digilo Website</p>
       <br />
@@ -41,7 +42,7 @@ export async function POST(req: Request) {
       <p style="white-space: pre-wrap;">${message || "N/A"}</p>
     `;
 
-    const { data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: "Digilo Contact Form <onboarding@resend.dev>",
       to: [process.env.CONTACT_EMAIL],
       subject: `New Project Inquiry: ${name}`,

@@ -4,6 +4,11 @@ import { useState } from "react";
 import { siteConfig } from "@/lib/config";
 import { MessageSquare, ArrowRight } from "lucide-react";
 
+function getWhatsAppUrl(number: string, message: string = "Hi Digilo, I would like to discuss a project.") {
+  const cleanNumber = number.replace(/[^\d+]/g, '');
+  return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
+}
+
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<{ type: "success" | "error" | null; message: string }>({ type: null, message: "" });
@@ -28,6 +33,9 @@ export default function Contact() {
         currentTools: formData.get("currentTools"),
         mainGoal: formData.get("mainGoal"),
         workflowVolume: formData.get("workflowVolume")
+      }),
+      ...(selectedService === "Software Development" && {
+        softwareGoal: formData.get("softwareGoal")
       })
     };
 
@@ -47,7 +55,7 @@ export default function Contact() {
       } else {
         setStatus({ type: "error", message: result.error });
       }
-    } catch (err) {
+    } catch {
       setStatus({ type: "error", message: "Something went wrong. Please try again later." });
     } finally {
       setIsSubmitting(false);
@@ -60,20 +68,23 @@ export default function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
           <div>
             <h2 className="text-5xl md:text-7xl font-bold uppercase tracking-tighter mb-8 leading-none">
-              Let's build<br/>something<br/>worth<br/>remembering.
+              READY TO<br/>AUTOMATE?
             </h2>
+            <p className="text-xl text-foreground/80 font-medium mb-12 max-w-md">
+              Tell us what you&apos;re doing manually. We&apos;ll help you figure out what can be automated.
+            </p>
             
             {siteConfig.whatsAppNumber && (
               <div className="mt-16">
                 <p className="text-foreground/60 mb-4 uppercase tracking-widest text-sm font-medium">Prefer direct chat?</p>
                 <a 
-                  href={`https://wa.me/${siteConfig.whatsAppNumber}`}
+                  href={getWhatsAppUrl(siteConfig.whatsAppNumber)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-3 bg-transparent border border-foreground hover:border-accent hover:text-accent px-8 py-5 font-bold uppercase tracking-widest transition-colors duration-300"
                 >
                   <MessageSquare className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
-                  Chat on WhatsApp
+                  Chat on WhatsApp &rarr;
                 </a>
               </div>
             )}
@@ -145,8 +156,7 @@ export default function Contact() {
                   >
                     <option value="" disabled className="bg-background text-foreground/50">Select a service...</option>
                     <option value="AI Automation" className="bg-background">AI Automation</option>
-                    <option value="Website Development" className="bg-background">Website Development</option>
-                    <option value="App Development" className="bg-background">App Development</option>
+                    <option value="Software Development" className="bg-background">Software Development</option>
                     <option value="Bulk Project Contract" className="bg-background">Bulk Project Contract</option>
                     <option value="Other" className="bg-background">Other</option>
                   </select>
@@ -216,7 +226,23 @@ export default function Contact() {
                 </div>
               )}
 
-              {selectedService !== "AI Automation" && (
+              {selectedService === "Software Development" && (
+                <div className="p-6 bg-foreground/5 border border-foreground/10 space-y-8">
+                  <div className="space-y-2 group">
+                    <label htmlFor="softwareGoal" className="text-xs font-bold uppercase tracking-widest text-foreground/50 transition-colors group-focus-within:text-accent">What are you looking to build? *</label>
+                    <textarea 
+                      id="softwareGoal" 
+                      name="softwareGoal" 
+                      required 
+                      rows={3}
+                      className="w-full bg-transparent border-b border-foreground/20 py-3 focus:outline-none focus:border-accent transition-colors rounded-none resize-none placeholder:text-foreground/20"
+                      placeholder="Example: We need a custom internal dashboard for our operations team..."
+                    />
+                  </div>
+                </div>
+              )}
+
+              {selectedService !== "AI Automation" && selectedService !== "Software Development" && (
                 <div className="space-y-2 group">
                   <label htmlFor="message" className="text-xs font-bold uppercase tracking-widest text-foreground/50 transition-colors group-focus-within:text-accent">Message *</label>
                   <textarea 
@@ -244,7 +270,7 @@ export default function Contact() {
                 {isSubmitting ? (
                   <span className="animate-pulse">Sending...</span>
                 ) : status.type === 'success' ? (
-                  <span>Message sent successfully. We'll get back to you shortly.</span>
+                  <span>Message sent successfully. We&apos;ll get back to you shortly.</span>
                 ) : (
                   <>
                     Send Message

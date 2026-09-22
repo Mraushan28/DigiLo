@@ -7,7 +7,7 @@ export default function Footer() {
   const { socialLinks } = siteConfig;
 
   return (
-    <footer className="bg-foreground text-background py-20 px-6 border-t border-background/10">
+    <footer className="bg-background text-foreground py-20 px-6 border-t border-foreground/10">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-24">
           
@@ -21,17 +21,17 @@ export default function Footer() {
                 className="object-contain object-left" 
               />
             </Link>
-            <p className="text-background/60 font-medium max-w-xs">
-              Design. Motion. Technology.
+            <p className="text-foreground/60 font-medium max-w-xs">
+              AI Automation. Software. Scale.
             </p>
           </div>
 
           {/* Explore Column */}
           <div className="lg:col-span-1">
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-background/40 mb-8">
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-foreground/40 mb-8">
               Explore
             </h4>
-            <ul className="space-y-4 font-medium text-background/80">
+            <ul className="space-y-4 font-medium text-foreground/80">
               <li><Link href="#services" className="hover:text-accent transition-colors">Services</Link></li>
               <li><Link href="#work" className="hover:text-accent transition-colors">Work</Link></li>
               <li><Link href="#about" className="hover:text-accent transition-colors">About</Link></li>
@@ -42,13 +42,12 @@ export default function Footer() {
 
           {/* Services Column */}
           <div className="lg:col-span-1">
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-background/40 mb-8">
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-foreground/40 mb-8">
               Services
             </h4>
-            <ul className="space-y-4 font-medium text-background/80">
+            <ul className="space-y-4 font-medium text-foreground/80">
               <li>AI Automation</li>
-              <li>Website Development</li>
-              <li>App Development</li>
+              <li>Software Development</li>
               <li>
                 <a href={siteConfig.contractsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors flex items-center gap-1 group">
                   Bulk Contracts <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
@@ -59,10 +58,10 @@ export default function Footer() {
 
           {/* Social Column */}
           <div className="lg:col-span-1">
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-background/40 mb-8">
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-foreground/40 mb-8">
               Social
             </h4>
-            <ul className="space-y-4 font-medium uppercase text-sm tracking-widest text-background/80">
+            <ul className="space-y-4 font-medium uppercase text-sm tracking-widest text-foreground/80">
               {Object.entries(socialLinks).map(([network, url]) => (
                 <li key={network}>
                   {url ? (
@@ -70,7 +69,7 @@ export default function Footer() {
                       {network} <ArrowRight className="w-4 h-4 -rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                     </a>
                   ) : (
-                    <span className="text-background/40 cursor-not-allowed flex items-center gap-2">
+                    <span className="text-foreground/40 cursor-not-allowed flex items-center gap-2">
                       {network} <ArrowRight className="w-4 h-4 -rotate-45 opacity-50" />
                     </span>
                   )}
@@ -82,11 +81,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-background/10 text-xs font-medium text-background/40">
+        <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-foreground/10 text-xs font-medium text-foreground/40">
           <p>&copy; {new Date().getFullYear()} Digilo. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
-            <Link href="/privacy" className="hover:text-background transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-background transition-colors">Terms of Service</Link>
+            <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-foreground transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>

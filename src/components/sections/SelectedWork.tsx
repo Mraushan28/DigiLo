@@ -11,17 +11,13 @@ export default function SelectedWork() {
           {portfolioProjects.map((project, index) => {
             // Editorial layout
             let colSpanClass = "md:col-span-12";
-            let aspectClass = "aspect-[4/3] md:aspect-[16/9]";
             
             if (index % 4 === 1) {
               colSpanClass = "md:col-span-7";
-              aspectClass = "aspect-[4/5] md:aspect-[4/3]";
             } else if (index % 4 === 2) {
               colSpanClass = "md:col-span-5 md:mt-32";
-              aspectClass = "aspect-[4/5] md:aspect-[3/4]";
             } else if (index % 4 === 3) {
               colSpanClass = "md:col-span-12";
-              aspectClass = "aspect-[4/3] md:aspect-[21/9]";
             }
 
             return (
@@ -29,18 +25,18 @@ export default function SelectedWork() {
                 key={project.title} 
                 className={`group flex flex-col cursor-pointer ${colSpanClass}`}
               >
-                <div className={`relative overflow-hidden bg-foreground/5 mb-8 ${aspectClass}`}>
+                <div className="relative overflow-hidden bg-foreground/5 mb-8 w-full border border-foreground/10 transition-colors duration-500 md:group-hover:border-accent/50 rounded-sm">
                   <Image
                     src={project.media}
                     alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-500 ease-out md:group-hover:scale-105"
+                    width={1600}
+                    height={900}
+                    className="w-full h-auto object-contain transition-transform duration-500 ease-out md:group-hover:scale-102"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 100vw"
                   />
                   <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-md px-4 py-2 text-[10px] font-mono tracking-[0.2em] uppercase rounded-full border border-foreground/10 text-foreground z-10">
                     {project.category}
                   </div>
-                  <div className="absolute inset-0 border border-foreground/10 pointer-events-none transition-colors duration-500 md:group-hover:border-accent/50"></div>
                 </div>
                 
                 <div className="flex justify-between items-start">

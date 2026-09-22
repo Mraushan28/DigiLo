@@ -29,7 +29,7 @@ export const portfolioProjects: Project[] = [
   },
   {
     title: "SAAS ADMIN PLATFORM",
-    category: "WEB DEVELOPMENT",
+    category: "SOFTWARE DEVELOPMENT",
     year: "2025",
     media: "/projects/project-03.jpg",
     mediaType: "image",
@@ -38,7 +38,7 @@ export const portfolioProjects: Project[] = [
   },
   {
     title: "CROSS-PLATFORM MVP",
-    category: "APP DEVELOPMENT",
+    category: "SOFTWARE DEVELOPMENT",
     year: "2025",
     media: "/projects/project-04.jpg",
     mediaType: "image",

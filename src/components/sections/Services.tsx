@@ -109,7 +109,7 @@ export default function Services() {
           <div className="mt-12 text-center p-12 bg-accent/10 border border-accent/20">
             <h4 className="text-2xl font-bold uppercase tracking-tight mb-4 text-accent">WHAT SHOULD WE AUTOMATE?</h4>
             <p className="text-foreground/80 mb-8 max-w-xl mx-auto">
-              Tell us what your team does manually. We'll help identify where AI and automation can save time and reduce repetitive work.
+              Tell us what your team does manually. We&apos;ll help identify where AI and automation can save time and reduce repetitive work.
             </p>
             <a href="#contact" className="inline-block bg-accent text-background px-8 py-4 font-bold uppercase tracking-widest hover:bg-white transition-colors">
               Discuss an Automation &rarr;
@@ -118,24 +118,19 @@ export default function Services() {
         </div>
 
         {/* Secondary Services */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 border-t border-foreground/20 pt-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 border-t border-foreground/20 pt-24">
           <SecondaryService 
             num="02" 
-            title="WEBSITE DEVELOPMENT" 
-            headline="WE BUILD WEB PRODUCTS, NOT JUST WEB PAGES."
-            items={["Business Websites", "Corporate Websites", "Landing Pages", "E-commerce", "Web Applications", "SaaS Platforms", "Dashboards", "Admin Panels", "API Integration", "Database Integration", "Authentication", "Custom Web Systems"]}
+            title="SOFTWARE DEVELOPMENT" 
+            headline="SOFTWARE THAT FITS THE BUSINESS."
+            description="From internal systems to customer-facing products, Digilo builds reliable software around the way your business actually works."
+            items={["Custom Software", "Web Applications", "Mobile Applications", "SaaS Platforms", "Internal Business Systems", "Dashboards", "Admin Panels", "Backend Systems", "APIs", "Database Systems", "Authentication", "Third-party Integrations", "Cloud-based Applications"]}
           />
           <SecondaryService 
             num="03" 
-            title="APP DEVELOPMENT" 
-            headline="FROM IDEA TO WORKING APPLICATION."
-            items={["Android Applications", "iOS Applications", "Cross-platform Apps", "Business Apps", "Customer Apps", "Internal Company Apps", "MVP Development", "API & Backend", "Authentication", "Push Notifications", "Admin Dashboards"]}
-          />
-          <SecondaryService 
-            num="04" 
             title="BULK PROJECT CONTRACTS" 
             headline="NEED MORE DELIVERY CAPACITY?"
-            items={["Website development", "App development", "AI automation", "API integrations", "Recurring development", "Multiple project delivery", "Dedicated project teams"]}
+            items={["Software engineering", "AI automation", "API integrations", "Recurring development", "Multiple project delivery", "Dedicated project teams"]}
             isContracts
           />
         </div>
@@ -177,12 +172,13 @@ function FlowArrow({ active = false }: { active?: boolean }) {
   );
 }
 
-function SecondaryService({ num, title, headline, items, isContracts = false }: { num: string, title: string, headline: string, items: string[], isContracts?: boolean }) {
+function SecondaryService({ num, title, headline, description, items, isContracts = false }: { num: string, title: string, headline: string, description?: string, items: string[], isContracts?: boolean }) {
   return (
     <div className="flex flex-col">
       <span className="text-xl font-mono text-foreground/40 mb-4 block">{num}</span>
       <h3 className="text-2xl md:text-3xl font-bold uppercase tracking-tighter mb-4">{title}</h3>
-      <h4 className="text-sm font-bold uppercase tracking-widest text-foreground/60 mb-8 border-b border-foreground/10 pb-4">{headline}</h4>
+      <h4 className="text-sm font-bold uppercase tracking-widest text-foreground/60 mb-4 border-b border-foreground/10 pb-4">{headline}</h4>
+      {description && <p className="text-foreground/80 font-medium mb-8 max-w-xl">{description}</p>}
       <ul className="space-y-2 mb-8 flex-grow">
         {items.map((item, i) => (
           <li key={i} className="text-foreground/70 text-sm font-medium flex items-center gap-2">

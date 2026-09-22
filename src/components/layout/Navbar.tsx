@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { siteConfig } from "@/lib/config";
+import Image from "next/image";
 import { Menu, X, ArrowRight } from "lucide-react";
 
 export default function Navbar() {
@@ -33,8 +33,13 @@ export default function Navbar() {
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
-        <Link href="/" className="z-50 text-2xl md:text-3xl font-black tracking-tighter flex items-baseline gap-[1px]">
-          DIGIL<span className="text-accent text-3xl md:text-4xl leading-none">o</span>
+        <Link href="/" className="z-50 relative w-[100px] h-[32px] md:w-[120px] md:h-[40px]">
+          <Image 
+            src="/logo.png" 
+            alt="Digilo" 
+            fill 
+            className="object-contain object-left" 
+          />
         </Link>
 
         {/* Desktop Nav */}
