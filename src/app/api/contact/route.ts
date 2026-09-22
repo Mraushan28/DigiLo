@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     `;
 
     const { error } = await resend.emails.send({
-      from: "Digilo Contact Form <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM_EMAIL || "Digilo Contact Form <onboarding@resend.dev>",
       to: [process.env.CONTACT_EMAIL],
       subject: `New Project Inquiry: ${name}`,
       html: htmlContent,
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     if (error) {
       console.error("Resend API Error:", error);
       return NextResponse.json(
-        { error: "Failed to send the email. Please try again later." },
+        { error: `Email failed: ${error.message}` },
         { status: 500 }
       );
     }
