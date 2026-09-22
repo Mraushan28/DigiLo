@@ -49,7 +49,11 @@ export default function SelectedWork() {
                     <h3 className="text-2xl md:text-3xl font-bold uppercase tracking-tight mb-3 transition-colors duration-300 md:group-hover:text-accent">
                       {project.title}
                     </h3>
-                    <p className="text-foreground/70 text-sm md:text-base max-w-sm font-medium">{project.description}</p>
+                    <div className="text-foreground/70 text-sm md:text-base max-w-sm font-medium space-y-1">
+                      {project.description.split('\n').map((line, i) => (
+                        <p key={i}>{line}</p>
+                      ))}
+                    </div>
                   </div>
                   <div className="flex flex-col items-end justify-between h-full">
                     <span className="text-foreground/40 font-mono text-xs mb-2">{project.year}</span>

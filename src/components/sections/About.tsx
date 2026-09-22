@@ -13,25 +13,24 @@ export default function About() {
           
           <div className="lg:col-span-8">
             <h3 className="text-4xl md:text-5xl lg:text-7xl font-bold uppercase tracking-tighter leading-[0.9] mb-12">
-              CREATIVE THINKING.<br />
-              TECHNICAL EXECUTION.<br />
-              SCALABLE DELIVERY.
+              WE AUTOMATE.<br />
+              WE BUILD.<br />
+              WE SCALE.
             </h3>
             
             <div className="max-w-2xl">
               <p className="text-lg md:text-2xl text-background/80 font-medium mb-8">
-                Digilo is a digital agency combining design, motion, and technology to help businesses turn ideas into meaningful digital experiences.
+                Digilo is an AI automation and development agency helping businesses automate repetitive processes, build digital products and scale their technology operations.
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 border-t border-background/20 pt-16">
                 <div>
                   <h4 className="text-xl font-bold uppercase tracking-tight mb-4">What we do</h4>
                   <ul className="space-y-3 text-background/70 font-medium">
-                    <li>Graphic Design</li>
-                    <li>Video Editing</li>
-                    <li>Web Development</li>
-                    <li>AI & Automation</li>
-                    <li>Scalable/Bulk Delivery</li>
+                    <li>AI Automation</li>
+                    <li>Website Development</li>
+                    <li>App Development</li>
+                    <li>Bulk Project Contracts</li>
                   </ul>
                 </div>
                 <div>

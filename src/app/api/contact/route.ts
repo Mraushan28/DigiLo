@@ -4,9 +4,9 @@ import { Resend } from "resend";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, company, email, phone, service, projectType, budget, message } = body;
+    const { name, company, email, phone, service, budget, message, automationGoal, currentTools, mainGoal } = body;
 
-    if (!name || !email || !message) {
+    if (!name || !email || (!message && !automationGoal)) {
       return NextResponse.json(
         { error: "Name, email, and message are required." },
         { status: 400 }
@@ -30,13 +30,15 @@ export async function POST(req: Request) {
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Phone:</strong> ${phone || "Not specified"}</p>
       <p><strong>Service Requested:</strong> ${service || "Not specified"}</p>
-      <p><strong>Project Type:</strong> ${projectType || "Not specified"}</p>
       <p><strong>Budget:</strong> ${budget || "Not specified"}</p>
+      ${automationGoal ? `<p><strong>Automation Goal:</strong> ${automationGoal}</p>` : ""}
+      ${currentTools ? `<p><strong>Current Tools:</strong> ${currentTools}</p>` : ""}
+      ${mainGoal ? `<p><strong>Main Goal:</strong> ${mainGoal}</p>` : ""}
       <p><strong>Submission Date:</strong> ${new Date().toLocaleString()}</p>
       <p><strong>Source:</strong> Digilo Website</p>
       <br />
       <h3>Message:</h3>
-      <p style="white-space: pre-wrap;">${message}</p>
+      <p style="white-space: pre-wrap;">${message || "N/A"}</p>
     `;
 
     const { data, error } = await resend.emails.send({

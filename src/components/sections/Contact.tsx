@@ -7,6 +7,7 @@ import { MessageSquare, ArrowRight } from "lucide-react";
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<{ type: "success" | "error" | null; message: string }>({ type: null, message: "" });
+  const [selectedService, setSelectedService] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -20,9 +21,14 @@ export default function Contact() {
       email: formData.get("email"),
       phone: formData.get("phone"),
       service: formData.get("service"),
-      projectType: formData.get("projectType"),
       budget: formData.get("budget"),
       message: formData.get("message"),
+      ...(selectedService === "AI Automation" && {
+        automationGoal: formData.get("automationGoal"),
+        currentTools: formData.get("currentTools"),
+        mainGoal: formData.get("mainGoal"),
+        workflowVolume: formData.get("workflowVolume")
+      })
     };
 
     try {
@@ -37,6 +43,7 @@ export default function Contact() {
       if (res.ok) {
         setStatus({ type: "success", message: result.message });
         (e.target as HTMLFormElement).reset();
+        setSelectedService("");
       } else {
         setStatus({ type: "error", message: result.error });
       }
@@ -132,15 +139,15 @@ export default function Contact() {
                     id="service" 
                     name="service" 
                     required 
-                    defaultValue=""
+                    value={selectedService}
+                    onChange={(e) => setSelectedService(e.target.value)}
                     className="w-full bg-transparent border-b border-foreground/20 py-3 focus:outline-none focus:border-accent transition-colors rounded-none appearance-none"
                   >
                     <option value="" disabled className="bg-background text-foreground/50">Select a service...</option>
-                    <option value="Graphic Design" className="bg-background">Graphic Design</option>
-                    <option value="Video Editing" className="bg-background">Video Editing</option>
-                    <option value="Web Development" className="bg-background">Web Development</option>
-                    <option value="Bulk Contract" className="bg-background">Bulk Project Contract</option>
-                    <option value="AI & Automation" className="bg-background">AI & Automation</option>
+                    <option value="AI Automation" className="bg-background">AI Automation</option>
+                    <option value="Website Development" className="bg-background">Website Development</option>
+                    <option value="App Development" className="bg-background">App Development</option>
+                    <option value="Bulk Project Contract" className="bg-background">Bulk Project Contract</option>
                     <option value="Other" className="bg-background">Other</option>
                   </select>
                 </div>
@@ -162,28 +169,66 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="space-y-2 group">
-                <label htmlFor="projectType" className="text-xs font-bold uppercase tracking-widest text-foreground/50 transition-colors group-focus-within:text-accent">Project Type</label>
-                <input 
-                  type="text" 
-                  id="projectType" 
-                  name="projectType" 
-                  className="w-full bg-transparent border-b border-foreground/20 py-3 focus:outline-none focus:border-accent transition-colors rounded-none placeholder:text-foreground/20"
-                  placeholder="e.g. Rebranding, E-commerce, Corporate Video..."
-                />
-              </div>
+              {selectedService === "AI Automation" && (
+                <div className="p-6 bg-foreground/5 border border-foreground/10 space-y-8">
+                  <div className="space-y-2 group">
+                    <label htmlFor="automationGoal" className="text-xs font-bold uppercase tracking-widest text-foreground/50 transition-colors group-focus-within:text-accent">What would you like to automate? *</label>
+                    <textarea 
+                      id="automationGoal" 
+                      name="automationGoal" 
+                      required 
+                      rows={3}
+                      className="w-full bg-transparent border-b border-foreground/20 py-3 focus:outline-none focus:border-accent transition-colors rounded-none resize-none placeholder:text-foreground/20"
+                      placeholder="Example: We receive leads from our website and WhatsApp and currently enter them manually into our CRM."
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2 group">
+                      <label htmlFor="currentTools" className="text-xs font-bold uppercase tracking-widest text-foreground/50 transition-colors group-focus-within:text-accent">Current tools</label>
+                      <input 
+                        type="text" 
+                        id="currentTools" 
+                        name="currentTools" 
+                        className="w-full bg-transparent border-b border-foreground/20 py-3 focus:outline-none focus:border-accent transition-colors rounded-none placeholder:text-foreground/20"
+                        placeholder="CRM, Sheets, WhatsApp, etc."
+                      />
+                    </div>
+                    
+                    <div className="space-y-2 group">
+                      <label htmlFor="mainGoal" className="text-xs font-bold uppercase tracking-widest text-foreground/50 transition-colors group-focus-within:text-accent">Main goal</label>
+                      <select 
+                        id="mainGoal" 
+                        name="mainGoal" 
+                        defaultValue=""
+                        className="w-full bg-transparent border-b border-foreground/20 py-3 focus:outline-none focus:border-accent transition-colors rounded-none appearance-none"
+                      >
+                        <option value="" disabled className="bg-background text-foreground/50">Select primary goal...</option>
+                        <option value="Reduce manual work" className="bg-background">Reduce manual work</option>
+                        <option value="Save time" className="bg-background">Save time</option>
+                        <option value="Improve lead management" className="bg-background">Improve lead management</option>
+                        <option value="Improve customer support" className="bg-background">Improve customer support</option>
+                        <option value="Connect tools" className="bg-background">Connect tools</option>
+                        <option value="Other" className="bg-background">Other</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-              <div className="space-y-2 group">
-                <label htmlFor="message" className="text-xs font-bold uppercase tracking-widest text-foreground/50 transition-colors group-focus-within:text-accent">Message *</label>
-                <textarea 
-                  id="message" 
-                  name="message" 
-                  required 
-                  rows={4}
-                  className="w-full bg-transparent border-b border-foreground/20 py-3 focus:outline-none focus:border-accent transition-colors rounded-none resize-none placeholder:text-foreground/20"
-                  placeholder="Tell us about your project..."
-                />
-              </div>
+              {selectedService !== "AI Automation" && (
+                <div className="space-y-2 group">
+                  <label htmlFor="message" className="text-xs font-bold uppercase tracking-widest text-foreground/50 transition-colors group-focus-within:text-accent">Message *</label>
+                  <textarea 
+                    id="message" 
+                    name="message" 
+                    required 
+                    rows={4}
+                    className="w-full bg-transparent border-b border-foreground/20 py-3 focus:outline-none focus:border-accent transition-colors rounded-none resize-none placeholder:text-foreground/20"
+                    placeholder="Tell us about your project..."
+                  />
+                </div>
+              )}
 
               {status.message && (
                 <div className={`p-4 text-sm font-medium border ${status.type === 'success' ? 'bg-accent/10 text-accent border-accent/20' : 'bg-red-500/10 text-red-500 border-red-500/20'}`}>

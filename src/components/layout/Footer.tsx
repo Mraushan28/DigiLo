@@ -46,10 +46,9 @@ export default function Footer() {
               Services
             </h4>
             <ul className="space-y-4 font-medium text-background/80">
-              <li>Graphic Design</li>
-              <li>Video Editing</li>
-              <li>Web Development</li>
-              <li>AI & Automation</li>
+              <li>AI Automation</li>
+              <li>Website Development</li>
+              <li>App Development</li>
               <li>
                 <a href={siteConfig.contractsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors flex items-center gap-1 group">
                   Bulk Contracts <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />

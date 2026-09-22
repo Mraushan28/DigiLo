@@ -18,7 +18,7 @@ export default function Home() {
         {/* MARQUEE */}
         <div className="w-full bg-accent text-background py-4 overflow-hidden flex whitespace-nowrap border-y border-foreground/10">
           <div className="animate-marquee inline-block font-bold uppercase tracking-[0.2em] text-sm md:text-lg">
-            DESIGN &mdash; MOTION &mdash; CODE &mdash; SCALE &mdash; DESIGN &mdash; MOTION &mdash; CODE &mdash; SCALE &mdash; DESIGN &mdash; MOTION &mdash; CODE &mdash; SCALE &mdash; DESIGN &mdash; MOTION &mdash; CODE &mdash; SCALE &mdash;
+            AUTOMATE &mdash; BUILD &mdash; SCALE &mdash; AI &mdash; AUTOMATE &mdash; BUILD &mdash; SCALE &mdash; AI &mdash; AUTOMATE &mdash; BUILD &mdash; SCALE &mdash; AI &mdash; AUTOMATE &mdash; BUILD &mdash; SCALE &mdash; AI &mdash;
           </div>
         </div>
 
@@ -27,14 +27,14 @@ export default function Home() {
           <div className="container mx-auto">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b border-foreground/10 pb-8">
               <h2 className="text-sm font-bold uppercase tracking-widest text-foreground/50">
-                One team. Four capabilities.
+                One team. Four core focuses.
               </h2>
               <p className="max-w-md text-foreground/70 mt-4 md:mt-0 font-medium">
-                We bridge the gap between creative vision and technical execution.
+                We build intelligent systems and scale technology operations.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
-              {['DESIGN', 'MOTION', 'CODE', 'SCALE'].map((cap, i) => (
+              {['AI AUTOMATION', 'WEBSITE DEV', 'APP DEV', 'BULK CONTRACTS'].map((cap, i) => (
                 <div key={cap} className="group relative">
                   <span className="text-accent font-mono text-xs block mb-4">0{i + 1}</span>
                   <h3 className="text-3xl lg:text-4xl font-bold uppercase tracking-tight mb-4 group-hover:text-accent transition-colors duration-300">{cap}</h3>
@@ -78,10 +78,10 @@ export default function Home() {
           <div className="container mx-auto max-w-5xl relative z-10 flex flex-col items-center">
             <span className="text-accent font-mono text-sm uppercase tracking-[0.2em] mb-8 block">Agency Partnership</span>
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter uppercase mb-8 leading-[0.9]">
-              MORE PROJECTS.<br />ONE DELIVERY PARTNER.
+              NEED MORE DELIVERY CAPACITY?
             </h2>
             <p className="text-lg md:text-xl mb-12 opacity-70 max-w-2xl font-medium">
-              Need additional design, development or content capacity? Digilo helps businesses and agencies handle recurring and high-volume digital project requirements.
+              Digilo works with companies and agencies that need reliable development and automation capacity for recurring or high-volume projects.
             </p>
             <a 
               href={siteConfig.contractsUrl} 

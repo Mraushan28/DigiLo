@@ -1,89 +1,173 @@
 "use client";
 
-import { useState } from "react";
-
-const services = [
-  {
-    id: "01",
-    title: "Graphic Design",
-    description: "Brand Identity, Logo Design, Marketing Materials, UI/Visual Design, and Creative Campaigns.",
-  },
-  {
-    id: "02",
-    title: "Video Editing",
-    description: "Social Media Videos, YouTube Reels, Motion Graphics, and Corporate Advertisements.",
-  },
-  {
-    id: "03",
-    title: "Web Development",
-    description: "Business Websites, Landing Pages, E-commerce, Web Applications, and Custom Platforms.",
-  },
-  {
-    id: "04",
-    title: "Bulk Contracts",
-    description: "Recurring project requirements, agency-to-agency collaboration, and dedicated project teams.",
-  },
-  {
-    id: "05",
-    title: "AI & Automation",
-    description: "Automate repetitive work, connect your tools, and build intelligent workflows that help your business move faster.",
-    visual: (
-      <div className="flex items-center gap-3 mt-4 text-accent opacity-80">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="animate-[pulse_3s_ease-in-out_infinite]">
-          <rect x="2" y="14" width="6" height="6" rx="1" />
-          <rect x="16" y="14" width="6" height="6" rx="1" />
-          <rect x="9" y="4" width="6" height="6" rx="1" />
-          <path d="M5 14v-2a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2" className="animate-[dash_2s_linear_infinite]" style={{ strokeDasharray: '4', strokeDashoffset: '0' }} />
-          <path d="M12 10V10" />
-        </svg>
-        <div className="h-[1px] w-8 bg-accent/50 relative overflow-hidden">
-          <div className="absolute top-0 left-0 h-full w-full bg-accent animate-[translateX_2s_linear_infinite] -translate-x-full"></div>
-        </div>
-      </div>
-    )
-  },
-];
+import { motion } from "framer-motion";
 
 export default function Services() {
-  const [hovered, setHovered] = useState<string | null>(null);
-
   return (
     <section id="services" className="py-32 px-6 relative border-t border-foreground/10">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start mb-24">
           <h2 className="text-4xl md:text-6xl font-bold uppercase tracking-tight">Services</h2>
           <p className="max-w-md text-foreground/60 mt-4 md:mt-0 text-lg">
-            We operate at the intersection of design, motion, and technology to deliver premium digital solutions.
+            We automate repetitive processes, build digital products, and scale technology operations.
           </p>
         </div>
 
-        <div className="flex flex-col border-t border-foreground/20">
-          {services.map((service) => (
-            <div
-              key={service.id}
-              onMouseEnter={() => setHovered(service.id)}
-              onMouseLeave={() => setHovered(null)}
-              className="group relative flex flex-col md:flex-row md:items-center justify-between py-12 border-b border-foreground/20 cursor-pointer transition-colors duration-500 hover:bg-foreground/5 px-4 md:px-8 -mx-4 md:-mx-8"
-            >
-              <div className="flex items-center gap-8 md:gap-16">
-                <span className="text-xl md:text-3xl font-mono text-foreground/40 group-hover:text-accent transition-colors duration-300">
-                  {service.id}
-                </span>
-                <h3 className="text-3xl md:text-6xl font-bold uppercase tracking-tighter">
-                  {service.title}
-                </h3>
-              </div>
+        {/* 01 - AI AUTOMATION - Primary Service (50% Visual Emphasis) */}
+        <div className="mb-24 md:mb-32">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 mb-16">
+            <div className="lg:w-1/3">
+              <span className="text-xl md:text-3xl font-mono text-accent mb-4 block">01</span>
+              <h3 className="text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tighter leading-none text-accent">
+                AI<br/>AUTOMATION
+              </h3>
+            </div>
+            <div className="lg:w-2/3">
+              <h4 className="text-2xl md:text-4xl font-bold uppercase tracking-tight mb-6">
+                TURN REPETITIVE WORK INTO AUTOMATED SYSTEMS.
+              </h4>
+              <p className="text-xl md:text-2xl text-foreground/80 font-medium mb-12 max-w-3xl">
+                From lead generation to internal operations, Digilo builds AI-powered workflows that connect your tools, eliminate repetitive tasks and help your team focus on higher-value work.
+              </p>
               
-              <div className={`mt-6 md:mt-0 md:max-w-md overflow-hidden transition-all duration-500 ease-in-out ${
-                hovered === service.id ? 'opacity-100 max-h-60 md:translate-x-0' : 'opacity-60 max-h-20 md:opacity-0 md:translate-x-8'
-              }`}>
-                <p className="text-foreground/80 text-lg">{service.description}</p>
-                {'visual' in service && service.visual}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-foreground/20">
+                <ServiceDetail title="AI WORKFLOW AUTOMATION" desc="Automate repetitive business processes using AI and workflow platforms." />
+                <ServiceDetail title="LEAD AUTOMATION" desc="Capture, qualify, enrich and route leads automatically." />
+                <ServiceDetail title="AI CHATBOTS & ASSISTANTS" desc="Build AI-powered assistants for customer support, sales and internal teams." />
+                <ServiceDetail title="CRM AUTOMATION" desc="Automatically update, organize and manage customer data." />
+                <ServiceDetail title="EMAIL & COMMUNICATION" desc="Automate personalized emails, notifications and follow-ups." />
+                <ServiceDetail title="DATA AUTOMATION" desc="Collect, transform, analyze and move data between systems automatically." />
+                <ServiceDetail title="API & TOOL INTEGRATION" desc="Connect CRMs, websites, databases, payment systems and third-party tools." />
+                <ServiceDetail title="CUSTOM AI SOLUTIONS" desc="Build custom AI workflows around a company's specific business process." />
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* BEFORE / AFTER Visual */}
+          <div className="bg-foreground/5 border border-foreground/10 p-8 md:p-12 rounded-2xl overflow-hidden relative">
+            <h5 className="text-sm font-bold uppercase tracking-widest text-foreground/50 mb-8">WORKFLOW DEMONSTRATION</h5>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div>
+                <h6 className="text-xs font-mono uppercase tracking-[0.2em] text-foreground/40 mb-6">BEFORE (Manual)</h6>
+                <div className="flex flex-col gap-3">
+                  <FlowStep text="New Lead" />
+                  <FlowArrow />
+                  <FlowStep text="Manual Data Entry" />
+                  <FlowArrow />
+                  <FlowStep text="Manual Qualification" />
+                  <FlowArrow />
+                  <FlowStep text="Manual Email" />
+                  <FlowArrow />
+                  <FlowStep text="Manual CRM Update" />
+                </div>
+              </div>
+              <div className="relative">
+                <div className="absolute top-0 bottom-0 -left-6 w-px bg-foreground/10 hidden lg:block"></div>
+                <h6 className="text-xs font-mono uppercase tracking-[0.2em] text-accent mb-6">AFTER (Automated)</h6>
+                <div className="flex flex-col gap-3">
+                  <FlowStep text="New Lead" active />
+                  <FlowArrow active />
+                  <FlowStep text="AI Qualification" active />
+                  <FlowArrow active />
+                  <FlowStep text="CRM Update" active />
+                  <FlowArrow active />
+                  <FlowStep text="Personalized Email" active />
+                  <FlowArrow active />
+                  <FlowStep text="Sales Notification" active />
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-12 text-center p-12 bg-accent/10 border border-accent/20">
+            <h4 className="text-2xl font-bold uppercase tracking-tight mb-4 text-accent">WHAT SHOULD WE AUTOMATE?</h4>
+            <p className="text-foreground/80 mb-8 max-w-xl mx-auto">
+              Tell us what your team does manually. We'll help identify where AI and automation can save time and reduce repetitive work.
+            </p>
+            <a href="#contact" className="inline-block bg-accent text-background px-8 py-4 font-bold uppercase tracking-widest hover:bg-white transition-colors">
+              Discuss an Automation &rarr;
+            </a>
+          </div>
+        </div>
+
+        {/* Secondary Services */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 border-t border-foreground/20 pt-24">
+          <SecondaryService 
+            num="02" 
+            title="WEBSITE DEVELOPMENT" 
+            headline="WE BUILD WEB PRODUCTS, NOT JUST WEB PAGES."
+            items={["Business Websites", "Corporate Websites", "Landing Pages", "E-commerce", "Web Applications", "SaaS Platforms", "Dashboards", "Admin Panels", "API Integration", "Database Integration", "Authentication", "Custom Web Systems"]}
+          />
+          <SecondaryService 
+            num="03" 
+            title="APP DEVELOPMENT" 
+            headline="FROM IDEA TO WORKING APPLICATION."
+            items={["Android Applications", "iOS Applications", "Cross-platform Apps", "Business Apps", "Customer Apps", "Internal Company Apps", "MVP Development", "API & Backend", "Authentication", "Push Notifications", "Admin Dashboards"]}
+          />
+          <SecondaryService 
+            num="04" 
+            title="BULK PROJECT CONTRACTS" 
+            headline="NEED MORE DELIVERY CAPACITY?"
+            items={["Website development", "App development", "AI automation", "API integrations", "Recurring development", "Multiple project delivery", "Dedicated project teams"]}
+            isContracts
+          />
         </div>
       </div>
     </section>
+  );
+}
+
+function ServiceDetail({ title, desc }: { title: string, desc: string }) {
+  return (
+    <div>
+      <h5 className="text-lg font-bold uppercase tracking-tight mb-2 text-foreground">{title}</h5>
+      <p className="text-foreground/60 text-sm font-medium">{desc}</p>
+    </div>
+  );
+}
+
+function FlowStep({ text, active = false }: { text: string, active?: boolean }) {
+  return (
+    <div className={`py-3 px-4 rounded border text-sm font-medium uppercase tracking-wide flex justify-between items-center ${active ? 'bg-accent/10 border-accent/30 text-accent' : 'bg-background border-foreground/10 text-foreground/70'}`}>
+      {text}
+      {active && <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>}
+    </div>
+  );
+}
+
+function FlowArrow({ active = false }: { active?: boolean }) {
+  return (
+    <div className="flex justify-center -my-1 relative z-10">
+      <div className={`w-0.5 h-4 ${active ? 'bg-accent' : 'bg-foreground/20'}`}></div>
+      {active && (
+        <motion.div 
+          className="absolute top-0 w-0.5 h-4 bg-white"
+          animate={{ opacity: [0, 1, 0], y: [0, 8, 16] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        />
+      )}
+    </div>
+  );
+}
+
+function SecondaryService({ num, title, headline, items, isContracts = false }: { num: string, title: string, headline: string, items: string[], isContracts?: boolean }) {
+  return (
+    <div className="flex flex-col">
+      <span className="text-xl font-mono text-foreground/40 mb-4 block">{num}</span>
+      <h3 className="text-2xl md:text-3xl font-bold uppercase tracking-tighter mb-4">{title}</h3>
+      <h4 className="text-sm font-bold uppercase tracking-widest text-foreground/60 mb-8 border-b border-foreground/10 pb-4">{headline}</h4>
+      <ul className="space-y-2 mb-8 flex-grow">
+        {items.map((item, i) => (
+          <li key={i} className="text-foreground/70 text-sm font-medium flex items-center gap-2">
+            <span className="w-1 h-1 bg-foreground/30"></span> {item}
+          </li>
+        ))}
+      </ul>
+      {isContracts && (
+        <a href="https://nextodyssey.space/" target="_blank" rel="noopener noreferrer" className="inline-block mt-auto bg-transparent border border-foreground/20 text-foreground px-6 py-3 text-xs font-bold uppercase tracking-widest hover:border-accent hover:text-accent transition-colors text-center">
+          Explore Bulk Contracts &rarr;
+        </a>
+      )}
+    </div>
   );
 }
