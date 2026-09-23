@@ -16,9 +16,12 @@ export default function Footer() {
             <Link href="/" className="inline-block mb-6 text-2xl md:text-3xl font-black tracking-tighter">
               DIGIL<span className="text-accent">O</span>
             </Link>
-            <p className="text-foreground/60 font-medium max-w-xs">
+            <p className="text-foreground/60 font-medium max-w-xs mb-6">
               AI Automation. Software. Scale.
             </p>
+            <a href="mailto:hello@digilo.space" className="inline-block text-sm font-medium hover:text-accent transition-colors">
+              hello@digilo.space
+            </a>
           </div>
 
           {/* Explore Column */}
