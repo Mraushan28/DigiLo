@@ -13,8 +13,8 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!process.env.RESEND_API_KEY || !process.env.CONTACT_EMAIL) {
-      console.error("Missing RESEND_API_KEY or CONTACT_EMAIL in environment variables.");
+    if (!process.env.RESEND_API_KEY) {
+      console.error("Missing RESEND_API_KEY in environment variables.");
       return NextResponse.json(
         { error: "Server configuration error. Email service is unavailable." },
         { status: 500 }
@@ -43,9 +43,9 @@ export async function POST(req: Request) {
     `;
 
     const { error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || "Digilo Contact Form <onboarding@resend.dev>",
-      to: [process.env.CONTACT_EMAIL],
-      subject: `New Project Inquiry: ${name}`,
+      from: "Digilo <hello@digilo.space>",
+      to: ["hello@digilo.space"],
+      subject: "New Project Inquiry — Digilo",
       html: htmlContent,
       replyTo: email,
     });
