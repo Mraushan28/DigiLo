@@ -19,8 +19,8 @@ export default function Footer() {
             <p className="text-foreground/60 font-medium max-w-xs mb-6">
               AI Automation. Software. Scale.
             </p>
-            <a href="mailto:hello@digilo.space" className="inline-block text-sm font-medium hover:text-accent transition-colors">
-              hello@digilo.space
+            <a href="mailto:digilotech@gmail.com" className="inline-block text-sm font-medium hover:text-accent transition-colors">
+              digilotech@gmail.com
             </a>
           </div>
 
