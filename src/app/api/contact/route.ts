@@ -44,7 +44,7 @@ export async function POST(req: Request) {
 
     const { error } = await resend.emails.send({
       from: "Digilo Contact Form <onboarding@resend.dev>",
-      to: ["digilotech@gmail.com"],
+      to: ["rahulraushan802312@gmail.com"],
       subject: `New Project Inquiry: ${name}`,
       html: htmlContent,
       replyTo: email,
