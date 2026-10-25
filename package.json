@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "npx tsx tests/workflow-system.test.ts && npx tsx tests/integration-connection.test.ts && npx tsx tests/dynamic-catalog.test.ts && npx tsx tests/phase2-auth-persistence.test.ts && npx tsx tests/full-application-suite.test.ts && npx tsx tests/launchnest-lead-pipeline.test.ts && npx tsx tests/approval-auth-workflow-flow.test.ts && npx tsx tests/workflow-activation-blockers.test.ts && npx tsx tests/native-executor-engine.test.ts",
     "test:regression": "npx tsx tests/intent-selection-regression.test.ts",
-    "test:all": "npm test && npm run test:regression"
+    "test:all": "npm test && npm run test:regression",
+    "generate:secret": "node scripts/generate-secret.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

@@ -25,10 +25,10 @@ export const googleSheetsIntegration: IntegrationDefinition = {
     overview: "Connect client Google accounts directly via Digilo OAuth 2.0. Offline access tokens are encrypted using AES-256-GCM.",
     steps: [
       "Create OAuth 2.0 credentials in Google Cloud Console with 'Web Application' type.",
-      "Register redirect URI: http://localhost:3000/api/automation/integrations/google/callback.",
-      "Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env.local."
+      "Register redirect URI: https://<your-domain>/api/automation/integrations/google/callback (or http://localhost:3000 for local dev).",
+      "Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in environment variables."
     ],
-    registeredRedirectUri: "http://localhost:3000/api/automation/integrations/google/callback",
+    registeredRedirectUri: "/api/automation/integrations/google/callback",
     portalUrl: "https://console.cloud.google.com/apis/credentials"
   },
   resourceConfig: {

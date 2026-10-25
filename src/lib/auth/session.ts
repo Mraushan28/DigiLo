@@ -15,11 +15,14 @@ export interface SessionPayload {
 }
 
 function getSecretKey(): string {
-  return (
-    process.env.AUTH_SECRET ||
-    process.env.TOKEN_ENCRYPTION_KEY ||
-    "digilo_dev_session_secret_key_8801d01bf280590c9b68c5b597621c179"
-  );
+  const secret = process.env.AUTH_SECRET || process.env.TOKEN_ENCRYPTION_KEY;
+  if (!secret) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("AUTH_SECRET or TOKEN_ENCRYPTION_KEY environment variable is required in production for secure session signing.");
+    }
+    return "digilo_dev_session_secret_key_8801d01bf280590c9b68c5b597621c179";
+  }
+  return secret;
 }
 
 /**

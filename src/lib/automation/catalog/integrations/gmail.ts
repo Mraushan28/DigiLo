@@ -24,10 +24,10 @@ export const gmailIntegration: IntegrationDefinition = {
     overview: "Connect client Gmail or Google Workspace accounts directly via Digilo OAuth 2.0 with send-only scope.",
     steps: [
       "Enable Gmail API in Google Cloud Console.",
-      "Register redirect URI: http://localhost:3000/api/automation/integrations/gmail/callback.",
-      "Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env.local.",
+      "Register redirect URI: https://<your-domain>/api/automation/integrations/gmail/callback (or http://localhost:3000 for local dev).",
+      "Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in environment variables.",
     ],
-    registeredRedirectUri: "http://localhost:3000/api/automation/integrations/gmail/callback",
+    registeredRedirectUri: "/api/automation/integrations/gmail/callback",
     portalUrl: "https://console.cloud.google.com/apis/credentials",
   },
   resourceConfig: {

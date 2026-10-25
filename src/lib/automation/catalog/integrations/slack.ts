@@ -28,10 +28,10 @@ export const slackIntegration: IntegrationDefinition = {
     steps: [
       "Create a Slack App in https://api.slack.com/apps.",
       "Add Bot Token Scopes: chat:write, chat:write.public, channels:read, groups:read, team:read.",
-      "Add Redirect URL: http://localhost:3000/api/automation/integrations/slack/callback.",
-      "Set SLACK_CLIENT_ID and SLACK_CLIENT_SECRET in .env.local."
+      "Add Redirect URL: https://<your-domain>/api/automation/integrations/slack/callback (or http://localhost:3000 for local dev).",
+      "Set SLACK_CLIENT_ID and SLACK_CLIENT_SECRET in environment variables."
     ],
-    registeredRedirectUri: "http://localhost:3000/api/automation/integrations/slack/callback",
+    registeredRedirectUri: "/api/automation/integrations/slack/callback",
     portalUrl: "https://api.slack.com/apps"
   },
   resourceConfig: {
