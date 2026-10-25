@@ -6,12 +6,29 @@ import { claimDraftWorkflow } from "@/lib/automation/draft-session";
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 const GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
 
+function getCanonicalOrigin(req: NextRequest): string {
+  const configuredAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (configuredAppUrl && configuredAppUrl.startsWith("http")) {
+    return configuredAppUrl.replace(/\/+$/, "");
+  }
+  const forwardedProto = req.headers.get("x-forwarded-proto");
+  const forwardedHost = req.headers.get("x-forwarded-host") || req.headers.get("host");
+  if (forwardedProto && forwardedHost) {
+    return `${forwardedProto}://${forwardedHost}`;
+  }
+  let origin = req.nextUrl.origin;
+  if (origin.startsWith("http://") && !origin.includes("localhost") && !origin.includes("127.0.0.1")) {
+    origin = origin.replace("http://", "https://");
+  }
+  return origin;
+}
+
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const code = searchParams.get("code");
   const isMock = searchParams.get("mock") === "true";
   const error = searchParams.get("error");
-  const origin = req.nextUrl.origin;
+  const origin = getCanonicalOrigin(req);
 
   if (error) {
     const redirectUrl = new URL("/automation", origin);

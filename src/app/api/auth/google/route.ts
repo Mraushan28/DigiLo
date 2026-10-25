@@ -7,8 +7,25 @@ import { claimDraftWorkflow } from "@/lib/automation/draft-session";
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_SCOPES = "openid email profile";
 
+function getCanonicalOrigin(req: NextRequest): string {
+  const configuredAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (configuredAppUrl && configuredAppUrl.startsWith("http")) {
+    return configuredAppUrl.replace(/\/+$/, "");
+  }
+  const forwardedProto = req.headers.get("x-forwarded-proto");
+  const forwardedHost = req.headers.get("x-forwarded-host") || req.headers.get("host");
+  if (forwardedProto && forwardedHost) {
+    return `${forwardedProto}://${forwardedHost}`;
+  }
+  let origin = req.nextUrl.origin;
+  if (origin.startsWith("http://") && !origin.includes("localhost") && !origin.includes("127.0.0.1")) {
+    origin = origin.replace("http://", "https://");
+  }
+  return origin;
+}
+
 export async function GET(req: NextRequest) {
-  const origin = req.nextUrl.origin;
+  const origin = getCanonicalOrigin(req);
   const redirectUri = `${origin}/api/auth/google/callback`;
   const clientId = process.env.GOOGLE_CLIENT_ID;
 

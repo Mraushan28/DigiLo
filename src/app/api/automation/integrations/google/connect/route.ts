@@ -3,6 +3,15 @@ import { isGoogleOAuthConfigured, buildGoogleAuthUrl } from "@/lib/automation/oa
 import { generateOAuthState, setOAuthStateCookie } from "@/lib/automation/oauth/oauth-state";
 import { getWorkspaceId, setWorkspaceCookie } from "@/lib/automation/workspace-session";
 
+function getCanonicalOrigin(req: NextRequest): string {
+  const forwardedProto = req.headers.get("x-forwarded-proto");
+  const forwardedHost = req.headers.get("x-forwarded-host") || req.headers.get("host");
+  if (forwardedProto && forwardedHost) {
+    return `${forwardedProto}://${forwardedHost}`;
+  }
+  return req.nextUrl.origin;
+}
+
 export async function GET(req: NextRequest) {
   try {
     if (!isGoogleOAuthConfigured()) {
@@ -19,7 +28,8 @@ export async function GET(req: NextRequest) {
     const returnUrl = req.nextUrl.searchParams.get("returnUrl") || 
       (req.nextUrl.searchParams.get("workflowId") ? `/dashboard/workflows/${req.nextUrl.searchParams.get("workflowId")}` : undefined);
     const state = generateOAuthState("google_sheets", workspaceId, returnUrl);
-    const authUrl = buildGoogleAuthUrl(state, req.nextUrl.origin);
+    const origin = getCanonicalOrigin(req);
+    const authUrl = buildGoogleAuthUrl(state, origin);
 
     const shouldRedirect = req.nextUrl.searchParams.get("redirect") === "true";
 

@@ -23,10 +23,27 @@ export function isGoogleOAuthConfigured(): boolean {
 }
 
 export function getGoogleRedirectUri(origin?: string): string {
-  if (process.env.GOOGLE_REDIRECT_URI) {
-    return process.env.GOOGLE_REDIRECT_URI;
+  // 1. Explicit server-side environment override (Netlify env vars or .env.local)
+  if (process.env.GOOGLE_REDIRECT_URI && process.env.GOOGLE_REDIRECT_URI.trim()) {
+    return process.env.GOOGLE_REDIRECT_URI.trim();
   }
-  const base = origin || (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
+
+  // 2. Canonical production application URL if set (e.g., https://digilo.space)
+  const configuredAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (configuredAppUrl && configuredAppUrl.startsWith("http")) {
+    const cleanAppUrl = configuredAppUrl.replace(/\/+$/, "");
+    const secureAppUrl = cleanAppUrl.startsWith("http://") && !cleanAppUrl.includes("localhost") && !cleanAppUrl.includes("127.0.0.1")
+      ? cleanAppUrl.replace("http://", "https://")
+      : cleanAppUrl;
+    return `${secureAppUrl}/api/automation/integrations/google/callback`;
+  }
+
+  // 3. Fallback to request origin, enforcing https for any public non-localhost host
+  let base = (origin || "http://localhost:3000").trim().replace(/\/+$/, "");
+  if (base.startsWith("http://") && !base.includes("localhost") && !base.includes("127.0.0.1")) {
+    base = base.replace("http://", "https://");
+  }
+
   return `${base}/api/automation/integrations/google/callback`;
 }
 

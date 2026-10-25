@@ -9,7 +9,17 @@ import {
 } from "@/lib/automation/oauth/google-oauth";
 import { setWorkspaceCookie } from "@/lib/automation/workspace-session";
 
+function getCanonicalOrigin(req: NextRequest): string {
+  const forwardedProto = req.headers.get("x-forwarded-proto");
+  const forwardedHost = req.headers.get("x-forwarded-host") || req.headers.get("host");
+  if (forwardedProto && forwardedHost) {
+    return `${forwardedProto}://${forwardedHost}`;
+  }
+  return req.nextUrl.origin;
+}
+
 export async function GET(req: NextRequest) {
+  const origin = getCanonicalOrigin(req);
   const searchParams = req.nextUrl.searchParams;
   const code = searchParams.get("code");
   const state = searchParams.get("state");
@@ -20,14 +30,14 @@ export async function GET(req: NextRequest) {
   if (error) {
     const errorMsg = errorDescription || error;
     console.warn("[Google Callback] Provider error:", errorMsg);
-    const redirectUrl = new URL("/automation", req.nextUrl.origin);
+    const redirectUrl = new URL("/automation", origin);
     redirectUrl.searchParams.set("error", `Google connection cancelled or failed: ${errorMsg}`);
     redirectUrl.searchParams.set("provider", "google_sheets");
     return NextResponse.redirect(redirectUrl);
   }
 
   if (!code || !state) {
-    const redirectUrl = new URL("/automation", req.nextUrl.origin);
+    const redirectUrl = new URL("/automation", origin);
     redirectUrl.searchParams.set("error", "Missing code or state parameter in Google callback.");
     redirectUrl.searchParams.set("provider", "google_sheets");
     return NextResponse.redirect(redirectUrl);
@@ -39,7 +49,7 @@ export async function GET(req: NextRequest) {
 
   if (!stateValidation.isValid || !stateValidation.workspaceId) {
     console.warn("[Google Callback] Invalid OAuth state:", stateValidation.error);
-    const redirectUrl = new URL(targetPath, req.nextUrl.origin);
+    const redirectUrl = new URL(targetPath, origin);
     redirectUrl.searchParams.set("error", stateValidation.error || "OAuth security verification failed.");
     redirectUrl.searchParams.set("provider", "google_sheets");
     return NextResponse.redirect(redirectUrl);
@@ -47,11 +57,11 @@ export async function GET(req: NextRequest) {
 
   try {
     const workspaceId = stateValidation.workspaceId;
-    const { tokens, profile } = await exchangeGoogleCode(code, req.nextUrl.origin);
+    const { tokens, profile } = await exchangeGoogleCode(code, origin);
 
     await storeGoogleConnection(workspaceId, tokens, profile);
 
-    const successRedirectUrl = new URL(targetPath, req.nextUrl.origin);
+    const successRedirectUrl = new URL(targetPath, origin);
     successRedirectUrl.searchParams.set("connected", "google_sheets");
 
     const response = NextResponse.redirect(successRedirectUrl);
@@ -61,7 +71,7 @@ export async function GET(req: NextRequest) {
     return response;
   } catch (err) {
     console.error("[Google Callback] Exchange/storage error:", err);
-    const redirectUrl = new URL(targetPath, req.nextUrl.origin);
+    const redirectUrl = new URL(targetPath, origin);
     redirectUrl.searchParams.set(
       "error", 
       err instanceof Error ? err.message : "Failed to complete Google Sheets connection."

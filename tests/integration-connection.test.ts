@@ -26,7 +26,8 @@ import {
   buildGoogleAuthUrl, 
   storeGoogleConnection, 
   getValidGoogleAccessToken, 
-  disconnectGoogleIntegration 
+  disconnectGoogleIntegration,
+  getGoogleRedirectUri
 } from "../src/lib/automation/oauth/google-oauth";
 import { 
   buildSlackAuthUrl, 
@@ -170,6 +171,46 @@ async function runConnectionTests() {
     assert.ok(url.includes("access_type=offline"));
     assert.ok(url.includes("prompt=consent"));
     assert.ok(url.includes(encodeURIComponent("https://www.googleapis.com/auth/spreadsheets")));
+  });
+
+  // 4.1 Google Sheets OAuth Redirect URI consistency & resolution
+  await test("4.1 Google Sheets OAuth redirect URI uses exact callback route across local & production", () => {
+    const savedRedirectUri = process.env.GOOGLE_REDIRECT_URI;
+    const savedAppUrl = process.env.NEXT_PUBLIC_APP_URL;
+
+    try {
+      // Local development test with GOOGLE_REDIRECT_URI explicitly set
+      process.env.GOOGLE_REDIRECT_URI = "http://localhost:3000/api/automation/integrations/google/callback";
+      assert.equal(
+        getGoogleRedirectUri("http://localhost:3000"),
+        "http://localhost:3000/api/automation/integrations/google/callback"
+      );
+
+      // Production with Netlify GOOGLE_REDIRECT_URI set to https://digilo.space/...
+      process.env.GOOGLE_REDIRECT_URI = "https://digilo.space/api/automation/integrations/google/callback";
+      assert.equal(
+        getGoogleRedirectUri(),
+        "https://digilo.space/api/automation/integrations/google/callback"
+      );
+
+      // Production fallback with NEXT_PUBLIC_APP_URL when GOOGLE_REDIRECT_URI is omitted
+      delete process.env.GOOGLE_REDIRECT_URI;
+      process.env.NEXT_PUBLIC_APP_URL = "https://digilo.space";
+      assert.equal(
+        getGoogleRedirectUri(),
+        "https://digilo.space/api/automation/integrations/google/callback"
+      );
+
+      // Inbound origin normalization from reverse proxy (http://digilo.space -> https://digilo.space)
+      delete process.env.NEXT_PUBLIC_APP_URL;
+      assert.equal(
+        getGoogleRedirectUri("http://digilo.space"),
+        "https://digilo.space/api/automation/integrations/google/callback"
+      );
+    } finally {
+      process.env.GOOGLE_REDIRECT_URI = savedRedirectUri;
+      process.env.NEXT_PUBLIC_APP_URL = savedAppUrl;
+    }
   });
 
   // 5. Google Connection Storage & Token Refresh
