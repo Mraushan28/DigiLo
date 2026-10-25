@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 export default function Hero() {
@@ -32,9 +33,9 @@ export default function Hero() {
           <a href="#services" className="bg-accent text-background px-8 py-4 text-sm md:text-base font-bold uppercase tracking-widest hover:bg-white transition-colors">
             Automate Your Business &rarr;
           </a>
-          <a href="#contact" className="bg-transparent border border-foreground/20 text-foreground px-8 py-4 text-sm md:text-base font-bold uppercase tracking-widest hover:border-accent hover:text-accent transition-colors">
+          <Link href="/automation" className="bg-transparent border border-foreground/20 text-foreground px-8 py-4 text-sm md:text-base font-bold uppercase tracking-widest hover:border-accent hover:text-accent transition-colors">
             Start a Project &rarr;
-          </a>
+          </Link>
         </div>
       </div>
     </section>

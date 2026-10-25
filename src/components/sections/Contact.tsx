@@ -157,7 +157,6 @@ export default function Contact() {
                     <option value="" disabled className="bg-background text-foreground/50">Select a service...</option>
                     <option value="AI Automation" className="bg-background">AI Automation</option>
                     <option value="Software Development" className="bg-background">Software Development</option>
-                    <option value="Bulk Project Contract" className="bg-background">Bulk Project Contract</option>
                     <option value="Other" className="bg-background">Other</option>
                   </select>
                 </div>

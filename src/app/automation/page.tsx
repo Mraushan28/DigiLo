@@ -11,8 +11,8 @@ import ImpactMetrics from "@/components/automation/ImpactMetrics";
 import AutomationCTA from "@/components/automation/AutomationCTA";
 
 export const metadata = {
-  title: "Digilo AI Automation — Tell Us What You Do. We'll Find What to Automate.",
-  description: "Describe how your business works in plain language. DIGILO analyzes the process, identifies repetitive tasks, and turns them into intelligent automations.",
+  title: "Digilo AI Automation — Tell Us What to Automate.",
+  description: "Describe your process. Get a clear automation plan with step-by-step pipeline, required integrations, and execution controls.",
 };
 
 export default function AutomationPage() {

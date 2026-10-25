@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, MessageSquare, FileText, BarChart3, Users, Network, Briefcase } from "lucide-react";
+import { MessageSquare, FileText, BarChart3, Users, Network, Briefcase } from "lucide-react";
 
 const examples = [
   {

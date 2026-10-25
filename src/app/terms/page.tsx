@@ -7,7 +7,7 @@ export default function TermsPage() {
         <p>These Terms of Service govern your use of the Digilo website and the AI automation and development services we provide.</p>
         {/* Placeholder for actual terms content */}
         <h2>Services</h2>
-        <p>Digilo provides AI automation, website development, app development, and bulk project contracts as described on this website.</p>
+        <p>Digilo provides AI automation and software development services as described on this website.</p>
       </div>
     </div>
   );

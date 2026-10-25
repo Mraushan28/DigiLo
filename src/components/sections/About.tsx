@@ -29,7 +29,6 @@ export default function About() {
                   <ul className="space-y-3 text-foreground/70 font-medium">
                     <li>AI Automation</li>
                     <li>Software Development</li>
-                    <li>Bulk Project Contracts</li>
                   </ul>
                 </div>
                 <div>

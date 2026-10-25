@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Menu, X, ArrowRight } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthContext";
 
 export default function Navbar() {
+  const { user, workspace, openAuthModal, logout } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -18,10 +19,11 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: "Services", href: "#services" },
-    { name: "Work", href: "#work" },
-    { name: "About", href: "#about" },
-    { name: "Process", href: "#" }, // Placeholder for now or later integration
+    { name: "AI Automations", href: "/automation" },
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Services", href: "/#services" },
+    { name: "Work", href: "/#work" },
+    { name: "About", href: "/#about" },
   ];
 
   return (
@@ -50,7 +52,35 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center">
+        <div className="hidden md:flex items-center gap-6">
+          {user ? (
+            <div className="flex items-center gap-3">
+              <div className="flex flex-col text-right">
+                <span className="text-xs font-bold text-foreground truncate max-w-[140px]">
+                  {user.name}
+                </span>
+                <span className="text-[10px] font-mono text-accent truncate max-w-[140px]">
+                  {workspace?.name || "Workspace"}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={logout}
+                className="text-[11px] font-mono uppercase tracking-wider text-foreground/50 hover:text-red-400 transition-colors px-2.5 py-1 border border-foreground/15 rounded-sm hover:border-red-500/30"
+              >
+                Log Out
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => openAuthModal("login")}
+              className="text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:text-accent border border-foreground/20 hover:border-accent/40 px-3.5 py-1.5 rounded-sm transition-all"
+            >
+              Sign In
+            </button>
+          )}
+
           <a
             href="https://wa.me/917707052307?text=Hi%20Digilo%2C%20I'd%20like%20to%20discuss%20a%20project."
             target="_blank"
@@ -89,12 +119,41 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+          {user ? (
+            <div className="flex flex-col items-center gap-2 mt-4">
+              <span className="text-sm font-mono text-accent">
+                {user.name} ({workspace?.name || "Workspace"})
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  logout();
+                }}
+                className="text-xs font-mono uppercase tracking-widest text-red-400 hover:underline"
+              >
+                Log Out
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                openAuthModal("login");
+              }}
+              className="text-sm font-bold uppercase tracking-widest text-foreground hover:text-accent mt-4"
+            >
+              Sign In
+            </button>
+          )}
+
           <a
             href="https://wa.me/917707052307?text=Hi%20Digilo%2C%20I'd%20like%20to%20discuss%20a%20project."
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMobileMenuOpen(false)}
-            className="text-accent mt-8 flex items-center gap-3 text-lg font-bold uppercase tracking-widest"
+            className="text-accent mt-6 flex items-center gap-3 text-lg font-bold uppercase tracking-widest"
           >
             WHATSAPP US <ArrowRight className="w-6 h-6" />
           </a>

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { siteConfig } from "@/lib/config";
 import { ArrowRight } from "lucide-react";
 
@@ -44,13 +43,8 @@ export default function Footer() {
               Services
             </h4>
             <ul className="space-y-4 font-medium text-foreground/80">
-              <li>AI Automation</li>
-              <li>Software Development</li>
-              <li>
-                <a href={siteConfig.contractsUrl} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors flex items-center gap-1 group">
-                  Bulk Contracts <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </li>
+              <li><Link href="/automation" className="hover:text-accent transition-colors">AI Automation</Link></li>
+              <li><Link href="/#services" className="hover:text-accent transition-colors">Software Development</Link></li>
             </ul>
           </div>
 
