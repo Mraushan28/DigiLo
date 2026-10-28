@@ -250,7 +250,16 @@ test("=== WORKFLOW ACTIVATION BLOCKERS & EXECUTION SUITE ===", async () => {
           type: "action",
           action: "ai.analyze",
           description: "Analyze lead",
-          config: {},
+          config: {
+            mockAiOutput: {
+              urgencyScore: 85,
+              priority: "High",
+              service: "Web Development",
+              nextAction: "Review lead",
+              summary: "Lead analysis",
+              sentiment: "Positive",
+            },
+          },
         },
         {
           id: "step_sheets",
@@ -307,7 +316,16 @@ test("=== WORKFLOW ACTIVATION BLOCKERS & EXECUTION SUITE ===", async () => {
           type: "action",
           action: "ai.analyze",
           description: "Analyze lead",
-          config: {},
+          config: {
+            mockAiOutput: {
+              urgencyScore: 85,
+              priority: "High",
+              service: "Web Development",
+              nextAction: "Review lead",
+              summary: "Lead analysis",
+              sentiment: "Positive",
+            },
+          },
         },
         {
           id: "step_slack",
@@ -356,7 +374,16 @@ test("=== WORKFLOW ACTIVATION BLOCKERS & EXECUTION SUITE ===", async () => {
             type: "action",
             action: "ai.analyze",
             description: "Analyze lead",
-            config: {},
+            config: {
+              mockAiOutput: {
+                urgencyScore: 85,
+                priority: "High",
+                service: "Web Development",
+                nextAction: "Review lead",
+                summary: "Lead analysis",
+                sentiment: "Positive",
+              },
+            },
           },
           {
             id: "step_sheets",

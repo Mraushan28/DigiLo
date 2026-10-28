@@ -30,6 +30,7 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
+      workspaceId,
       workflow,
       liveIntegrations: Object.values(liveIntegrations),
       isExecutable: n8nExport.meta.isExecutable,

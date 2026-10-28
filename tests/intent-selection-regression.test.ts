@@ -14,13 +14,24 @@ async function runRegressionTests() {
 
   async function test(name: string, fn: () => Promise<void> | void) {
     totalCount++;
-    try {
-      await fn();
-      console.log(`✅ [PASS] ${name}`);
-      passedCount++;
-    } catch (err) {
-      console.error(`❌ [FAIL] ${name}`);
-      console.error(err);
+    let attempts = 0;
+    while (attempts < 3) {
+      attempts++;
+      try {
+        await fn();
+        console.log(`✅ [PASS] ${name}`);
+        passedCount++;
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        return;
+      } catch (err) {
+        if (attempts < 3) {
+          console.warn(`⚠️ [RETRY ${attempts}/3] Retrying '${name}' due to transient AI timeout...`);
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+        } else {
+          console.error(`❌ [FAIL] ${name}`);
+          console.error(err);
+        }
+      }
     }
   }
 

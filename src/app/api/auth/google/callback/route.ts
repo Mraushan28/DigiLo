@@ -2,26 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { authenticateWithGoogle } from "@/lib/auth/user-service";
 import { setSessionCookie } from "@/lib/auth/session";
 import { claimDraftWorkflow } from "@/lib/automation/draft-session";
+import { 
+  getCanonicalOrigin, 
+  getGoogleAuthRedirectUri, 
+  logOAuthDiagnostic 
+} from "@/lib/automation/oauth/oauth-canonical";
 
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 const GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
-
-function getCanonicalOrigin(req: NextRequest): string {
-  const configuredAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
-  if (configuredAppUrl && configuredAppUrl.startsWith("http")) {
-    return configuredAppUrl.replace(/\/+$/, "");
-  }
-  const forwardedProto = req.headers.get("x-forwarded-proto");
-  const forwardedHost = req.headers.get("x-forwarded-host") || req.headers.get("host");
-  if (forwardedProto && forwardedHost) {
-    return `${forwardedProto}://${forwardedHost}`;
-  }
-  let origin = req.nextUrl.origin;
-  if (origin.startsWith("http://") && !origin.includes("localhost") && !origin.includes("127.0.0.1")) {
-    origin = origin.replace("http://", "https://");
-  }
-  return origin;
-}
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
@@ -29,6 +17,7 @@ export async function GET(req: NextRequest) {
   const isMock = searchParams.get("mock") === "true";
   const error = searchParams.get("error");
   const origin = getCanonicalOrigin(req);
+  const redirectUri = getGoogleAuthRedirectUri(req);
 
   if (error) {
     const redirectUrl = new URL("/automation", origin);
@@ -72,7 +61,7 @@ export async function GET(req: NextRequest) {
 
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  const redirectUri = `${origin}/api/auth/google/callback`;
+  logOAuthDiagnostic("GoogleLogin", "Exchanging authorization code", redirectUri);
 
   if (!clientId || !clientSecret) {
     const redirectUrl = new URL("/automation", origin);

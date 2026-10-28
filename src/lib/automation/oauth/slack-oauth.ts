@@ -19,16 +19,17 @@ const SLACK_BOT_SCOPES = [
   "team:read"
 ].join(",");
 
+import { 
+  getSlackRedirectUri as resolveCanonicalSlackRedirectUri,
+  logOAuthDiagnostic 
+} from "./oauth-canonical";
+
 export function isSlackOAuthConfigured(): boolean {
   return Boolean(process.env.SLACK_CLIENT_ID && process.env.SLACK_CLIENT_SECRET);
 }
 
 export function getSlackRedirectUri(origin?: string): string {
-  if (process.env.SLACK_REDIRECT_URI) {
-    return process.env.SLACK_REDIRECT_URI;
-  }
-  const base = origin || (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
-  return `${base}/api/automation/integrations/slack/callback`;
+  return resolveCanonicalSlackRedirectUri(undefined, origin);
 }
 
 /**
@@ -41,6 +42,7 @@ export function buildSlackAuthUrl(state: string, origin?: string): string {
   }
 
   const redirectUri = getSlackRedirectUri(origin);
+  logOAuthDiagnostic("Slack", "Initiating authorization", redirectUri);
 
   const params = new URLSearchParams({
     client_id: clientId,
@@ -93,6 +95,7 @@ export async function exchangeSlackCode(
   }
 
   const redirectUri = getSlackRedirectUri(origin);
+  logOAuthDiagnostic("Slack", "Exchanging authorization code", redirectUri);
 
   const res = await fetch(SLACK_ACCESS_URL, {
     method: "POST",

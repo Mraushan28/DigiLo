@@ -139,10 +139,10 @@ export default function WorkflowControlsSection({
     switch (workflow.status) {
       case "active":
         return {
-          label: "ACTIVE",
+          label: "PRODUCTION",
           color: "bg-accent/20 border-accent text-accent",
           dot: "bg-accent animate-pulse",
-          description: "Live intake running. Inbound events execute instantly.",
+          description: "Live intake running. Inbound events execute instantly in production.",
         };
       case "paused":
         return {
@@ -481,17 +481,17 @@ export default function WorkflowControlsSection({
             {workflow.status === "active" ? (
               <>
                 <Pause className="w-3.5 h-3.5" />
-                <span>{isToggling ? "Updating..." : "Pause Workflow"}</span>
+                <span>{isToggling ? "Updating..." : "Pause Production"}</span>
               </>
             ) : workflow.status === "paused" ? (
               <>
                 <Play className="w-3.5 h-3.5 fill-current" />
-                <span>{isToggling ? "Updating..." : "Resume Workflow"}</span>
+                <span>{isToggling ? "Updating..." : "Resume Production"}</span>
               </>
             ) : (
               <>
                 <Play className="w-3.5 h-3.5 fill-current" />
-                <span>{isToggling ? "Updating..." : "Activate Workflow"}</span>
+                <span>{isToggling ? "Updating..." : "Activate to Production"}</span>
               </>
             )}
           </button>

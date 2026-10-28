@@ -25,6 +25,10 @@ export function isMongoConnected(): boolean {
  * Connects to MongoDB using connection pooling and global caching for Next.js hot-reloads.
  * If MONGODB_URI is not provided, gracefully resolves to null and enables offline mode.
  */
+let lastFailureTime = 0;
+const FAILURE_BACKOFF_MS = 30000; // 30 seconds backoff after connection failure
+let hasLoggedPlaceholderWarning = false;
+
 export async function connectToDatabase(): Promise<typeof mongoose | null> {
   const uri = process.env.MONGODB_URI;
 
@@ -32,8 +36,22 @@ export async function connectToDatabase(): Promise<typeof mongoose | null> {
     return null;
   }
 
+  // Detect unconfigured template placeholders to avoid stalling on invalid DNS lookups
+  if (uri.includes("<") || uri.includes(">") || uri.includes("your_")) {
+    if (!hasLoggedPlaceholderWarning) {
+      console.warn("[MongoDB] MONGODB_URI contains placeholder values; running in in-memory fallback mode.");
+      hasLoggedPlaceholderWarning = true;
+    }
+    return null;
+  }
+
   if (cached.conn) {
     return cached.conn;
+  }
+
+  // If a connection failed recently, avoid blocking the request thread with timeout delays
+  if (Date.now() - lastFailureTime < FAILURE_BACKOFF_MS) {
+    return null;
   }
 
   if (!cached.promise) {
@@ -52,6 +70,7 @@ export async function connectToDatabase(): Promise<typeof mongoose | null> {
       .catch((err) => {
         console.warn("[MongoDB] Connection failed, running in fallback mode:", err.message);
         cached.promise = null;
+        lastFailureTime = Date.now();
         return null as unknown as typeof mongoose;
       });
   }
@@ -62,6 +81,7 @@ export async function connectToDatabase(): Promise<typeof mongoose | null> {
     return conn;
   } catch (err) {
     cached.promise = null;
+    lastFailureTime = Date.now();
     console.warn("[MongoDB] Connection error:", err);
     return null;
   }

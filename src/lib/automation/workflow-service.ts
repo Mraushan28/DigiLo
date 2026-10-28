@@ -11,7 +11,7 @@ const memoryWorkflows = new Map<string, Workflow & { workspaceId: string }>();
 
 function workflowToDoc(doc: IWorkflow): Workflow {
   return {
-    id: doc._id ? String(doc._id) : "",
+    id: doc.id || (doc._id ? String(doc._id) : ""),
     name: doc.name,
     description: doc.description,
     version: doc.version || "1.0.0",
@@ -38,7 +38,7 @@ export async function listWorkflows(workspaceId: string): Promise<Array<Workflow
   if (isMongoConnected()) {
     const docs = await WorkflowModel.find({ workspaceId }).sort({ updatedAt: -1 }).lean();
     workflows = docs.map((d) => ({
-      id: d._id?.toString(),
+      id: d.id || d._id?.toString() || "",
       name: d.name,
       description: d.description,
       version: d.version || "1.0.0",
@@ -98,9 +98,10 @@ export async function getWorkflowById(workspaceId: string, workflowId: string): 
   await connectToDatabase();
 
   if (isMongoConnected()) {
+    const isObjectId = /^[0-9a-fA-F]{24}$/.test(workflowId);
     const doc = await WorkflowModel.findOne({
-      $or: [{ _id: workflowId.match(/^[0-9a-fA-F]{24}$/) ? workflowId : null }, { id: workflowId }, { _id: workflowId }],
       workspaceId,
+      ...(isObjectId ? { $or: [{ id: workflowId }, { _id: workflowId }] } : { id: workflowId }),
     });
 
     if (doc) {
@@ -155,11 +156,13 @@ export async function saveWorkflow(
   };
 
   if (isMongoConnected()) {
-    const filter = validated.id && validated.id.match(/^[0-9a-fA-F]{24}$/)
-      ? { _id: validated.id, workspaceId }
+    const isObjectId = Boolean(validated.id && /^[0-9a-fA-F]{24}$/.test(validated.id));
+    const filter = isObjectId
+      ? { $or: [{ _id: validated.id }, { id: workflowId }], workspaceId }
       : { id: workflowId, workspaceId };
 
     const updateData = {
+      id: workflowId,
       workspaceId,
       name: workflowToPersist.name,
       description: workflowToPersist.description,
@@ -269,9 +272,10 @@ export async function deleteWorkflow(workspaceId: string, workflowId: string): P
   await connectToDatabase();
 
   if (isMongoConnected()) {
+    const isObjectId = /^[0-9a-fA-F]{24}$/.test(workflowId);
     const res = await WorkflowModel.deleteOne({
-      $or: [{ _id: workflowId.match(/^[0-9a-fA-F]{24}$/) ? workflowId : null }, { id: workflowId }, { _id: workflowId }],
       workspaceId,
+      ...(isObjectId ? { $or: [{ id: workflowId }, { _id: workflowId }] } : { id: workflowId }),
     });
     return res.deletedCount > 0;
   }

@@ -114,7 +114,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setUser(null);
       setWorkspace(null);
-      window.location.reload();
+      if (typeof window !== "undefined") {
+        if (window.location.pathname.startsWith("/dashboard")) {
+          window.location.href = "/";
+        } else {
+          window.location.reload();
+        }
+      }
     }
   };
 

@@ -20,7 +20,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "AI Automations", href: "/automation" },
-    { name: "Dashboard", href: "/dashboard" },
+    ...(user ? [{ name: "Dashboard", href: "/dashboard" }] : []),
     { name: "Services", href: "/#services" },
     { name: "Work", href: "/#work" },
     { name: "About", href: "/#about" },

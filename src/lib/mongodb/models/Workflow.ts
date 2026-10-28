@@ -18,6 +18,7 @@ export interface IWorkflowTrigger {
 }
 
 export interface IWorkflow extends Document {
+  id?: string;
   workspaceId: string;
   name: string;
   description: string;
@@ -59,6 +60,11 @@ export const WorkflowStepSchema = new Schema<IWorkflowStep>(
 
 const WorkflowSchema = new Schema<IWorkflow>(
   {
+    id: {
+      type: String,
+      required: false,
+      index: true,
+    },
     workspaceId: {
       type: String,
       required: [true, "Workspace ID is required for tenant isolation"],
@@ -116,12 +122,14 @@ const WorkflowSchema = new Schema<IWorkflow>(
   },
   {
     timestamps: true,
+    id: false, // Prevents Mongoose from creating a virtual 'id' getter that shadows the schema 'id' field with _id.toString()
   }
 );
 
 // Compound indexes for tenant isolation and listing workflows
 WorkflowSchema.index({ workspaceId: 1, createdAt: -1 });
 WorkflowSchema.index({ workspaceId: 1, status: 1 });
+WorkflowSchema.index({ workspaceId: 1, id: 1 });
 
 export const WorkflowModel: Model<IWorkflow> =
   (mongoose.models.Workflow as Model<IWorkflow>) ||

@@ -16,16 +16,17 @@ const GMAIL_SCOPES = [
   "https://www.googleapis.com/auth/userinfo.profile",
 ].join(" ");
 
+import { 
+  getGmailRedirectUri as resolveCanonicalGmailRedirectUri,
+  logOAuthDiagnostic 
+} from "./oauth-canonical";
+
 export function isGmailOAuthConfigured(): boolean {
   return Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 }
 
 export function getGmailRedirectUri(origin?: string): string {
-  if (process.env.GMAIL_REDIRECT_URI) {
-    return process.env.GMAIL_REDIRECT_URI;
-  }
-  const base = origin || (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000");
-  return `${base}/api/automation/integrations/gmail/callback`;
+  return resolveCanonicalGmailRedirectUri(undefined, origin);
 }
 
 export function buildGmailAuthUrl(state: string, origin?: string): string {
@@ -35,6 +36,7 @@ export function buildGmailAuthUrl(state: string, origin?: string): string {
   }
 
   const redirectUri = getGmailRedirectUri(origin);
+  logOAuthDiagnostic("Gmail", "Initiating authorization", redirectUri);
 
   const params = new URLSearchParams({
     client_id: clientId,
@@ -69,6 +71,7 @@ export async function exchangeGmailCodeForTokens(
   }
 
   const redirectUri = getGmailRedirectUri(origin);
+  logOAuthDiagnostic("Gmail", "Exchanging authorization code", redirectUri);
 
   const res = await fetch(GOOGLE_TOKEN_URL, {
     method: "POST",

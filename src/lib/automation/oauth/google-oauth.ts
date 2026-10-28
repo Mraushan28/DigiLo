@@ -18,33 +18,17 @@ const GOOGLE_SCOPES = [
   "https://www.googleapis.com/auth/drive.readonly"
 ].join(" ");
 
+import { 
+  getGoogleSheetsRedirectUri, 
+  logOAuthDiagnostic 
+} from "./oauth-canonical";
+
 export function isGoogleOAuthConfigured(): boolean {
   return Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 }
 
 export function getGoogleRedirectUri(origin?: string): string {
-  // 1. Explicit server-side environment override (Netlify env vars or .env.local)
-  if (process.env.GOOGLE_REDIRECT_URI && process.env.GOOGLE_REDIRECT_URI.trim()) {
-    return process.env.GOOGLE_REDIRECT_URI.trim();
-  }
-
-  // 2. Canonical production application URL if set (e.g., https://digilo.space)
-  const configuredAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
-  if (configuredAppUrl && configuredAppUrl.startsWith("http")) {
-    const cleanAppUrl = configuredAppUrl.replace(/\/+$/, "");
-    const secureAppUrl = cleanAppUrl.startsWith("http://") && !cleanAppUrl.includes("localhost") && !cleanAppUrl.includes("127.0.0.1")
-      ? cleanAppUrl.replace("http://", "https://")
-      : cleanAppUrl;
-    return `${secureAppUrl}/api/automation/integrations/google/callback`;
-  }
-
-  // 3. Fallback to request origin, enforcing https for any public non-localhost host
-  let base = (origin || "http://localhost:3000").trim().replace(/\/+$/, "");
-  if (base.startsWith("http://") && !base.includes("localhost") && !base.includes("127.0.0.1")) {
-    base = base.replace("http://", "https://");
-  }
-
-  return `${base}/api/automation/integrations/google/callback`;
+  return getGoogleSheetsRedirectUri(undefined, origin);
 }
 
 /**
@@ -57,6 +41,7 @@ export function buildGoogleAuthUrl(state: string, origin?: string): string {
   }
 
   const redirectUri = getGoogleRedirectUri(origin);
+  logOAuthDiagnostic("GoogleSheets", "Initiating authorization", redirectUri);
 
   const params = new URLSearchParams({
     client_id: clientId,
@@ -102,6 +87,7 @@ export async function exchangeGoogleCode(
   }
 
   const redirectUri = getGoogleRedirectUri(origin);
+  logOAuthDiagnostic("GoogleSheets", "Exchanging authorization code", redirectUri);
 
   const tokenRes = await fetch(GOOGLE_TOKEN_URL, {
     method: "POST",

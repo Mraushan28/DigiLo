@@ -3,30 +3,17 @@ import crypto from "node:crypto";
 import { authenticateWithGoogle } from "@/lib/auth/user-service";
 import { setSessionCookie } from "@/lib/auth/session";
 import { claimDraftWorkflow } from "@/lib/automation/draft-session";
+import { 
+  getGoogleAuthRedirectUri, 
+  logOAuthDiagnostic 
+} from "@/lib/automation/oauth/oauth-canonical";
 
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_SCOPES = "openid email profile";
 
-function getCanonicalOrigin(req: NextRequest): string {
-  const configuredAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
-  if (configuredAppUrl && configuredAppUrl.startsWith("http")) {
-    return configuredAppUrl.replace(/\/+$/, "");
-  }
-  const forwardedProto = req.headers.get("x-forwarded-proto");
-  const forwardedHost = req.headers.get("x-forwarded-host") || req.headers.get("host");
-  if (forwardedProto && forwardedHost) {
-    return `${forwardedProto}://${forwardedHost}`;
-  }
-  let origin = req.nextUrl.origin;
-  if (origin.startsWith("http://") && !origin.includes("localhost") && !origin.includes("127.0.0.1")) {
-    origin = origin.replace("http://", "https://");
-  }
-  return origin;
-}
-
 export async function GET(req: NextRequest) {
-  const origin = getCanonicalOrigin(req);
-  const redirectUri = `${origin}/api/auth/google/callback`;
+  const redirectUri = getGoogleAuthRedirectUri(req);
+  logOAuthDiagnostic("GoogleLogin", "Initiating authorization", redirectUri);
   const clientId = process.env.GOOGLE_CLIENT_ID;
 
   // Generate tamper-resistant state
@@ -38,7 +25,7 @@ export async function GET(req: NextRequest) {
       configured: false,
       message: "GOOGLE_CLIENT_ID is not configured in server environment.",
       // Development mock fallback URL if requested
-      mockAuthUrl: `${origin}/api/auth/google/callback?mock=true&state=${state}`
+      mockAuthUrl: `${redirectUri}?mock=true&state=${state}`
     }, { status: 200 });
   }
 

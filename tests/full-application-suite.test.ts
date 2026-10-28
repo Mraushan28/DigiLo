@@ -91,7 +91,17 @@ async function runFullApplicationTestSuite() {
           type: "action",
           action: "ai.analyze",
           description: "Computes urgency and summary",
-          config: { model: "openai/gpt-oss-20b" },
+          config: { 
+            model: "openai/gpt-oss-20b",
+            mockAiOutput: {
+              urgencyScore: 90,
+              priority: "High",
+              service: "Enterprise Inbound",
+              nextAction: "Notify sales team",
+              summary: "Enterprise inquiry",
+              sentiment: "Positive",
+            },
+          },
         },
         {
           id: "step_slack_1",

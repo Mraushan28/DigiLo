@@ -34,7 +34,7 @@ interface WorkflowItem extends Workflow {
 }
 
 export default function DashboardOverviewPage() {
-  const { user, workspace } = useAuth();
+  const { user, workspace, isLoading: isAuthLoading, openAuthModal } = useAuth();
   const [workflows, setWorkflows] = useState<WorkflowItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,9 +55,12 @@ export default function DashboardOverviewPage() {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchWorkflows();
-  }, []);
+    if (user) {
+      fetchWorkflows();
+    } else if (!isAuthLoading) {
+      setIsLoading(false);
+    }
+  }, [user, isAuthLoading]);
 
   const filteredWorkflows = workflows.filter((w) => {
     const matchesSearch =
@@ -80,6 +83,62 @@ export default function DashboardOverviewPage() {
     if (action.includes("gmail") || action.includes("mail")) return <Mail className="w-3.5 h-3.5 text-amber-400" />;
     return <Layers className="w-3.5 h-3.5 text-foreground/70" />;
   };
+
+  if (isAuthLoading) {
+    return (
+      <>
+        <Navbar />
+        <main className="flex-1 flex flex-col items-center justify-center pt-28 pb-20 bg-background min-h-screen text-center px-6">
+          <Activity className="w-8 h-8 text-accent animate-spin mb-3" />
+          <p className="text-xs font-mono text-foreground/60">Verifying workspace session...</p>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  if (!user) {
+    return (
+      <>
+        <Navbar />
+        <main className="flex-1 flex flex-col items-center justify-center pt-28 pb-20 bg-background min-h-screen text-center px-6">
+          <div className="max-w-md w-full border border-foreground/15 bg-background/90 p-8 rounded-sm shadow-2xl flex flex-col items-center space-y-6">
+            <div className="w-14 h-14 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center">
+              <ShieldCheck className="w-7 h-7 text-accent" />
+            </div>
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-bold text-accent block mb-2">
+                AUTHENTICATION REQUIRED
+              </span>
+              <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-foreground">
+                Workspace Access Restricted
+              </h1>
+              <p className="text-xs text-foreground/60 mt-2 leading-relaxed font-normal">
+                You must be signed in to access the Enterprise Automation Dashboard.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
+              <button
+                type="button"
+                id="btn-dashboard-signin"
+                onClick={() => openAuthModal("login")}
+                className="w-full flex-1 py-2.5 bg-accent text-background text-xs font-mono font-bold uppercase tracking-wider rounded-sm hover:brightness-110 shadow-lg transition-all"
+              >
+                Sign In to Workspace
+              </button>
+              <Link
+                href="/"
+                className="w-full sm:w-auto px-4 py-2.5 border border-foreground/15 text-foreground/70 hover:text-foreground text-xs font-mono uppercase rounded-sm transition-colors text-center"
+              >
+                Home
+              </Link>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -143,7 +202,7 @@ export default function DashboardOverviewPage() {
 
             <div className="border border-foreground/15 bg-background/80 p-5 rounded-sm shadow-sm">
               <span className="text-[10px] font-mono uppercase tracking-wider text-foreground/50 block mb-1">
-                Active Live
+                Active Production
               </span>
               <p className="text-3xl font-bold font-mono text-accent">
                 {activeCount}
@@ -193,18 +252,24 @@ export default function DashboardOverviewPage() {
             </div>
 
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-              {(["all", "active", "paused", "setup_required", "draft"] as const).map((st) => (
+              {[
+                { id: "all", label: "All" },
+                { id: "active", label: "Production" },
+                { id: "paused", label: "Paused" },
+                { id: "setup_required", label: "Setup Required" },
+                { id: "draft", label: "Draft" },
+              ].map((st) => (
                 <button
-                  key={st}
+                  key={st.id}
                   type="button"
-                  onClick={() => setStatusFilter(st)}
+                  onClick={() => setStatusFilter(st.id)}
                   className={`px-3 py-1.5 text-[11px] font-mono uppercase tracking-wider rounded-sm transition-all shrink-0 ${
-                    statusFilter === st
+                    statusFilter === st.id
                       ? "bg-accent text-background font-bold"
                       : "bg-foreground/5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 border border-foreground/10"
                   }`}
                 >
-                  {st.replace("_", " ")}
+                  {st.label}
                 </button>
               ))}
             </div>
@@ -264,7 +329,7 @@ export default function DashboardOverviewPage() {
                               : "bg-foreground/10 border-foreground/20 text-foreground/70"
                           }`}
                         >
-                          {wf.status?.replace("_", " ") || "DRAFT"}
+                          {isActive ? "PRODUCTION" : isPaused ? "PAUSED" : isSetupReq ? "SETUP REQUIRED" : "DRAFT"}
                         </span>
 
                         <span className="text-[10px] font-mono text-foreground/40">

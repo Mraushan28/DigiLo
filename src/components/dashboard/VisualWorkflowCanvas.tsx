@@ -69,7 +69,7 @@ export default function VisualWorkflowCanvas({
   // Clamped Zoom Setter
   const clampZoom = (val: number) => Math.min(Math.max(val, MIN_ZOOM), MAX_ZOOM);
 
-  // Zoom centered on a specific point in the container viewport
+  // Zoom centered on viewport center or cursor focal point
   const zoomAtPoint = useCallback((factor: number, clientX?: number, clientY?: number) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -77,18 +77,20 @@ export default function VisualWorkflowCanvas({
     const focalX = clientX !== undefined ? clientX - rect.left : rect.width / 2;
     const focalY = clientY !== undefined ? clientY - rect.top : rect.height / 2;
 
+    const offsetX = focalX - rect.width / 2;
+    const offsetY = focalY - rect.height / 2;
+
     setZoom((prevZoom) => {
       const nextZoom = clampZoom(prevZoom * factor);
       if (nextZoom === prevZoom) return prevZoom;
 
-      // Adjust pan so the focal point on the canvas remains stationary
-      setPan((prevPan) => {
-        const ratio = nextZoom / prevZoom;
-        return {
-          x: focalX - (focalX - prevPan.x) * ratio,
-          y: focalY - (focalY - prevPan.y) * ratio,
-        };
-      });
+      const ratio = nextZoom / prevZoom;
+
+      // Adjust pan relative to container center
+      setPan((prevPan) => ({
+        x: Math.max(-800, Math.min(800, prevPan.x - (offsetX - prevPan.x) * (ratio - 1))),
+        y: Math.max(-500, Math.min(500, prevPan.y - (offsetY - prevPan.y) * (ratio - 1))),
+      }));
 
       return nextZoom;
     });
@@ -101,34 +103,16 @@ export default function VisualWorkflowCanvas({
     setPan({ x: 0, y: 0 });
   };
   const handle100Percent = () => {
-    zoomAtPoint(1 / zoom);
+    setZoom(1);
   };
 
-  // Fit to screen: centers and scales all nodes within the container bounds
+  // Fit to screen: resets pan to center and sets comfortable zoom
   const handleFitToScreen = useCallback(() => {
-    if (!containerRef.current || !contentRef.current) return;
-    const container = containerRef.current;
-    const content = contentRef.current;
-
-    const padding = 60;
-    const availWidth = Math.max(container.clientWidth - padding * 2, 200);
-    const availHeight = Math.max(container.clientHeight - padding * 2, 200);
-
-    const contentWidth = content.scrollWidth || 800;
-    const contentHeight = content.scrollHeight || 160;
-
-    const scaleX = availWidth / contentWidth;
-    const scaleY = availHeight / contentHeight;
-    const fitScale = clampZoom(Math.min(scaleX, scaleY, 1.1));
-
-    setZoom(fitScale);
-    setPan({
-      x: (container.clientWidth - contentWidth * fitScale) / 2,
-      y: (container.clientHeight - contentHeight * fitScale) / 2,
-    });
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
   }, []);
 
-  // Native non-passive Wheel listener for trackpad pinch & mouse wheel zoom toward cursor
+  // Native non-passive Wheel listener for trackpad pinch & smooth pan
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -136,19 +120,15 @@ export default function VisualWorkflowCanvas({
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
 
-      // If user holds Ctrl/Cmd or pinches trackpad, zoom toward cursor
+      // Trackpad pinch or Cmd/Ctrl + Wheel: zoom toward cursor
       if (e.ctrlKey || e.metaKey) {
         const zoomFactor = 1 - e.deltaY * 0.01;
         zoomAtPoint(zoomFactor, e.clientX, e.clientY);
-      } else if (e.altKey || Math.abs(e.deltaX) === 0) {
-        // Alt key or standard single-axis wheel: zoom toward mouse pointer
-        const zoomFactor = e.deltaY < 0 ? 1.12 : 0.88;
-        zoomAtPoint(zoomFactor, e.clientX, e.clientY);
       } else {
-        // Trackpad 2-finger pan
+        // Standard 2-finger scroll or wheel: smooth pan
         setPan((prev) => ({
-          x: prev.x - e.deltaX,
-          y: prev.y - e.deltaY,
+          x: Math.max(-800, Math.min(800, prev.x - e.deltaX)),
+          y: Math.max(-500, Math.min(500, prev.y - e.deltaY)),
         }));
       }
     };

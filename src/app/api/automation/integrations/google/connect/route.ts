@@ -2,15 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { isGoogleOAuthConfigured, buildGoogleAuthUrl } from "@/lib/automation/oauth/google-oauth";
 import { generateOAuthState, setOAuthStateCookie } from "@/lib/automation/oauth/oauth-state";
 import { getWorkspaceId, setWorkspaceCookie } from "@/lib/automation/workspace-session";
-
-function getCanonicalOrigin(req: NextRequest): string {
-  const forwardedProto = req.headers.get("x-forwarded-proto");
-  const forwardedHost = req.headers.get("x-forwarded-host") || req.headers.get("host");
-  if (forwardedProto && forwardedHost) {
-    return `${forwardedProto}://${forwardedHost}`;
-  }
-  return req.nextUrl.origin;
-}
+import { getCanonicalOrigin } from "@/lib/automation/oauth/oauth-canonical";
 
 export async function GET(req: NextRequest) {
   try {

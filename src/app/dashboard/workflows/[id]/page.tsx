@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer";
 import { Workflow, WorkflowStep, IntegrationStatusInfo } from "@/types/automation";
 import { AnalyticsSummary, AISuggestion } from "@/lib/automation/telemetry-service";
 import { IExecution } from "@/lib/mongodb/models/Execution";
+import { useAuth } from "@/components/auth/AuthContext";
 
 import VisualWorkflowCanvas from "@/components/dashboard/VisualWorkflowCanvas";
 import WorkflowControlsSection from "@/components/dashboard/WorkflowControlsSection";
@@ -22,7 +23,8 @@ import {
   AlertTriangle, 
   RefreshCw,
   Sparkles,
-  Layers
+  Layers,
+  ShieldCheck
 } from "lucide-react";
 
 export default function WorkflowDetailPage({
@@ -33,10 +35,17 @@ export default function WorkflowDetailPage({
   const resolvedParams = use(params);
   const workflowId = resolvedParams.id;
 
+  const { user, workspace, isLoading: isAuthLoading, openAuthModal } = useAuth();
   const [workflow, setWorkflow] = useState<Workflow | null>(null);
   const [liveIntegrations, setLiveIntegrations] = useState<IntegrationStatusInfo[]>([]);
-  const [workspaceId, setWorkspaceId] = useState<string>("ws_default");
+  const [workspaceId, setWorkspaceId] = useState<string>(workspace?.id || "ws_default");
   const [timeframe, setTimeframe] = useState<"24h" | "7d" | "30d">("7d");
+
+  useEffect(() => {
+    if (workspace?.id && workspaceId === "ws_default") {
+      setWorkspaceId(workspace.id);
+    }
+  }, [workspace?.id, workspaceId]);
 
   const [analytics, setAnalytics] = useState<AnalyticsSummary>({
     timeframe: "7d",
@@ -79,21 +88,29 @@ export default function WorkflowDetailPage({
   };
 
   // 1. Fetch Workflow details
-  const fetchWorkflowData = async () => {
+  const fetchWorkflowData = async (): Promise<boolean> => {
     try {
       const res = await fetch(`/api/automation/workflows/${workflowId}`);
       const data = await res.json();
       if (data.success && data.workflow) {
         setWorkflow(data.workflow);
+        if (data.workspaceId) {
+          setWorkspaceId(data.workspaceId);
+        }
         if (data.liveIntegrations) {
           setLiveIntegrations(data.liveIntegrations);
         }
+        return true;
       } else {
-        setErrorMessage(data.error?.message || "Failed to load workflow.");
+        setWorkflow(null);
+        setErrorMessage(data.error?.message || `Workflow '${workflowId}' not found.`);
+        return false;
       }
     } catch (err) {
       console.warn("Failed to fetch workflow:", err);
+      setWorkflow(null);
       setErrorMessage("Could not connect to workflow server.");
+      return false;
     }
   };
 
@@ -143,19 +160,25 @@ export default function WorkflowDetailPage({
   };
 
   const loadAllData = async () => {
-    await Promise.all([
-      fetchWorkflowData(),
-      fetchAnalytics(timeframe),
-      fetchExecutions(),
-      fetchSuggestions(),
-    ]);
+    setIsLoading(true);
+    const hasWorkflow = await fetchWorkflowData();
+    if (hasWorkflow) {
+      await Promise.all([
+        fetchAnalytics(timeframe),
+        fetchExecutions(),
+        fetchSuggestions(),
+      ]);
+    }
     setIsLoading(false);
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    loadAllData();
-  }, [workflowId]);
+    if (user) {
+      loadAllData();
+    } else if (!isAuthLoading) {
+      setIsLoading(false);
+    }
+  }, [workflowId, user, isAuthLoading]);
 
   const handleTimeframeChange = async (tf: "24h" | "7d" | "30d") => {
     setTimeframe(tf);
@@ -296,6 +319,62 @@ export default function WorkflowDetailPage({
     }
   };
 
+  if (isAuthLoading) {
+    return (
+      <>
+        <Navbar />
+        <main className="flex-1 flex flex-col items-center justify-center pt-28 pb-20 bg-background min-h-screen text-center px-6">
+          <Activity className="w-8 h-8 text-accent animate-spin mb-3" />
+          <p className="text-xs font-mono text-foreground/60">Verifying workspace session...</p>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  if (!user) {
+    return (
+      <>
+        <Navbar />
+        <main className="flex-1 flex flex-col items-center justify-center pt-28 pb-20 bg-background min-h-screen text-center px-6">
+          <div className="max-w-md w-full border border-foreground/15 bg-background/90 p-8 rounded-sm shadow-2xl flex flex-col items-center space-y-6">
+            <div className="w-14 h-14 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center">
+              <ShieldCheck className="w-7 h-7 text-accent" />
+            </div>
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-bold text-accent block mb-2">
+                AUTHENTICATION REQUIRED
+              </span>
+              <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-foreground">
+                Workflow Access Restricted
+              </h1>
+              <p className="text-xs text-foreground/60 mt-2 leading-relaxed font-normal">
+                You must be logged in to access and edit automations in Workflow Studio.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
+              <button
+                type="button"
+                id="btn-studio-signin"
+                onClick={() => openAuthModal("login")}
+                className="w-full flex-1 py-2.5 bg-accent text-background text-xs font-mono font-bold uppercase tracking-wider rounded-sm hover:brightness-110 shadow-lg transition-all"
+              >
+                Sign In to Workspace
+              </button>
+              <Link
+                href="/dashboard"
+                className="w-full sm:w-auto px-4 py-2.5 border border-foreground/15 text-foreground/70 hover:text-foreground text-xs font-mono uppercase rounded-sm transition-colors text-center"
+              >
+                Dashboard
+              </Link>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
   return (
     <>
       <Navbar />
@@ -322,6 +401,11 @@ export default function WorkflowDetailPage({
                   <span className="text-[10px] font-mono text-foreground/40">
                     ID: {workflowId}
                   </span>
+                  {workflow?.status === "active" && (
+                    <span className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider rounded-sm bg-accent/20 border border-accent text-accent animate-pulse">
+                      PRODUCTION
+                    </span>
+                  )}
                 </div>
                 <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-foreground truncate max-w-xl">
                   {workflow?.name || "Workflow Studio"}
@@ -410,7 +494,9 @@ export default function WorkflowDetailPage({
                 isToggling={isToggling}
                 workspaceId={workspaceId}
                 hasSuccessfulTest={executions.some((e) => e.status === "success") || analytics.successfulRuns > 0}
-                onRefreshIntegrations={fetchWorkflowData}
+                onRefreshIntegrations={async () => {
+                  await fetchWorkflowData();
+                }}
                 onWorkflowUpdated={(updated) => setWorkflow(updated)}
               />
 
@@ -444,20 +530,37 @@ export default function WorkflowDetailPage({
 
             </div>
           ) : (
-            <div className="py-16 text-center space-y-3">
-              <AlertTriangle className="w-10 h-10 text-amber-400 mx-auto" />
-              <h2 className="text-base font-bold uppercase tracking-wider text-foreground">
-                Workflow Not Found
-              </h2>
-              <p className="text-xs text-foreground/50 max-w-sm mx-auto">
-                The requested automation could not be resolved in this tenant workspace.
-              </p>
-              <Link
-                href="/dashboard"
-                className="mt-3 inline-block px-4 py-2 bg-accent text-background text-xs font-mono font-bold uppercase tracking-wider rounded-sm"
-              >
-                Return to Dashboard
-              </Link>
+            <div className="py-16 text-center space-y-4 max-w-md mx-auto">
+              <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto">
+                <AlertTriangle className="w-6 h-6 text-amber-400" />
+              </div>
+              <div className="space-y-1.5">
+                <h2 className="text-lg font-bold uppercase tracking-wider text-foreground">
+                  Workflow Not Found
+                </h2>
+                <p className="text-xs text-foreground/60 leading-relaxed">
+                  The requested automation <code className="px-1.5 py-0.5 rounded bg-foreground/10 text-accent font-mono text-[11px]">{workflowId}</code> could not be resolved in this tenant workspace.
+                </p>
+                <p className="text-[11px] text-foreground/40">
+                  It may belong to another workspace, have been deleted, or the identifier may be incorrect.
+                </p>
+              </div>
+              <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/dashboard"
+                  id="btn-return-dashboard"
+                  className="px-4 py-2.5 bg-accent text-background text-xs font-mono font-bold uppercase tracking-wider rounded-sm hover:brightness-110 transition-all shadow-md"
+                >
+                  Return to Dashboard
+                </Link>
+                <Link
+                  href="/automation"
+                  id="btn-create-automation"
+                  className="px-4 py-2.5 border border-foreground/20 text-foreground text-xs font-mono font-bold uppercase tracking-wider rounded-sm hover:border-accent hover:text-accent transition-all"
+                >
+                  New Automation
+                </Link>
+              </div>
             </div>
           )}
 
