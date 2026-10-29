@@ -2,54 +2,133 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Sparkles, ArrowRight, Zap, Database, MessageSquare, CheckCircle2 } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center pt-24 px-4 md:px-8 relative overflow-hidden">
-      <div className="text-center z-10 w-full max-w-7xl mx-auto flex flex-col items-center">
+    <section className="min-h-screen flex flex-col items-center justify-center pt-28 pb-16 px-4 md:px-8 relative overflow-hidden bg-[#0A0A0A] text-white">
+      {/* Background subtle radial glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-5xl h-96 bg-[#C8FF00]/5 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="text-center z-10 w-full max-w-6xl mx-auto flex flex-col items-center">
         
-        {/* Animated Workflow Visual */}
-        <div className="relative w-full max-w-4xl mx-auto flex flex-row items-center justify-between mb-16 px-2 md:px-4 py-6 md:py-8 border border-foreground/10 bg-foreground/5 rounded-2xl overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)', backgroundSize: '1rem 1rem' }}></div>
+        {/* Animated Workflow Visual Graphic */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative w-full max-w-4xl mx-auto flex flex-row items-center justify-between mb-12 px-3 md:px-6 py-4 md:py-6 border border-[#222222] bg-[#111111]/90 rounded-lg shadow-2xl backdrop-blur-md overflow-hidden"
+        >
+          <div 
+            className="absolute inset-0 opacity-[0.04]" 
+            style={{ 
+              backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', 
+              backgroundSize: '1rem 1rem' 
+            }} 
+          />
           
-          <WorkflowNode label="FORM" icon="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <WorkflowNode 
+            stepNum="TRIGGER" 
+            label="WEBHOOK" 
+            sub="Receives: lead_submitted"
+            icon={<Zap className="w-5 h-5 text-[#C8FF00]" />} 
+            highlight 
+          />
           <WorkflowConnector />
-          <WorkflowNode label="AI" highlight icon="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          <WorkflowNode 
+            stepNum="STEP 1" 
+            label="AI ANALYSIS" 
+            sub="Classifies: Hot/Warm/Cold"
+            icon={<Sparkles className="w-5 h-5 text-[#3B82F6]" />} 
+          />
           <WorkflowConnector />
-          <WorkflowNode label="DATABASE" icon="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+          <WorkflowNode 
+            stepNum="STEP 2" 
+            label="GOOGLE SHEETS" 
+            sub="Sheet: CRM → Tab: Leads"
+            icon={<Database className="w-5 h-5 text-[#22C55E]" />} 
+          />
           <WorkflowConnector />
-          <WorkflowNode label="CRM" icon="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          <WorkflowNode 
+            stepNum="STEP 3" 
+            label="SLACK" 
+            sub="Channel: #leads"
+            icon={<MessageSquare className="w-5 h-5 text-[#A855F7]" />} 
+          />
+        </motion.div>
+
+        {/* Eyebrow */}
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#1A1A1A] border border-[#222222] mb-6">
+          <span className="w-2 h-2 rounded-full bg-[#C8FF00] animate-pulse" />
+          <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#C8FF00] font-bold">
+            DIGILO AI AUTOMATION ENGINE
+          </span>
         </div>
 
-        <h1 className="text-[clamp(2.5rem,8vw,6rem)] font-bold tracking-tighter leading-[0.9] mb-8 uppercase max-w-5xl mx-auto break-words">
-          AUTOMATE THE WORK.<br/>BUILD WHAT&apos;S NEXT.
+        {/* Master Headline (PRD v3.1 Spec) */}
+        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] mb-6 uppercase max-w-5xl mx-auto text-white">
+          Automate Your Business.<br />
+          <span className="text-[#C8FF00]">Just Describe It.</span>
         </h1>
         
-        <p className="text-[clamp(1rem,3vw,1.5rem)] font-medium mb-12 max-w-2xl px-4 text-foreground/80">
-          Digilo builds AI-powered automations and software that help businesses work faster, smarter and at scale.
+        {/* Subheadline (PRD v3.1 Spec) */}
+        <p className="text-base sm:text-xl md:text-2xl font-normal mb-8 max-w-3xl px-4 text-[#A0A0A0] leading-relaxed">
+          Type what you want automated. DIGILO AI builds the workflow, connects your tools, and makes it live — in minutes.
         </p>
         
-        <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 md:gap-6">
-          <a href="#services" className="bg-accent text-background px-8 py-4 text-sm md:text-base font-bold uppercase tracking-widest hover:bg-white transition-colors">
-            Automate Your Business &rarr;
-          </a>
-          <Link href="/automation" className="bg-transparent border border-foreground/20 text-foreground px-8 py-4 text-sm md:text-base font-bold uppercase tracking-widest hover:border-accent hover:text-accent transition-colors">
-            Start a Project &rarr;
+        {/* CTAs Row */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md mx-auto mb-6">
+          <Link 
+            href="/automation" 
+            className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 bg-[#C8FF00] hover:bg-[#b2e600] text-black px-8 py-4 text-sm font-bold uppercase tracking-wider rounded transition-all shadow-lg shadow-[#C8FF00]/15"
+          >
+            Start Building Free <ArrowRight className="w-4 h-4" />
           </Link>
+          <a 
+            href="#how-it-works" 
+            className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 bg-transparent border border-white hover:border-[#C8FF00] text-white hover:text-[#C8FF00] px-8 py-4 text-sm font-bold uppercase tracking-wider rounded transition-all"
+          >
+            Watch Demo
+          </a>
         </div>
+
+        {/* Trust Text (PRD v3.1 Spec) */}
+        <p className="text-xs font-mono uppercase tracking-wider text-[#555555] flex items-center justify-center gap-2">
+          <CheckCircle2 className="w-3.5 h-3.5 text-[#22C55E]" />
+          No credit card. No code. No technical skills needed.
+        </p>
+
       </div>
     </section>
   );
 }
 
-function WorkflowNode({ label, icon, highlight = false }: { label: string, icon: string, highlight?: boolean }) {
+function WorkflowNode({ 
+  stepNum, 
+  label, 
+  sub, 
+  icon, 
+  highlight = false 
+}: { 
+  stepNum: string; 
+  label: string; 
+  sub: string; 
+  icon: React.ReactNode; 
+  highlight?: boolean; 
+}) {
   return (
-    <div className={`relative z-10 flex flex-col items-center justify-center p-2 sm:p-3 md:p-6 rounded-xl border ${highlight ? 'border-accent bg-accent/10 shadow-[0_0_30px_rgba(204,255,0,0.15)]' : 'border-foreground/20 bg-background'} transition-all`}>
-      <svg className={`w-5 h-5 sm:w-6 sm:h-6 md:w-12 md:h-12 mb-1 sm:mb-2 md:mb-3 ${highlight ? 'text-accent' : 'text-foreground/70'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
-      </svg>
-      <span className={`text-[8px] sm:text-[10px] md:text-xs font-bold tracking-widest uppercase ${highlight ? 'text-accent' : 'text-foreground/70'}`}>
+    <div className={`relative z-10 flex flex-col items-center justify-center p-2.5 sm:p-4 rounded-lg border ${
+      highlight 
+        ? 'border-l-4 border-l-[#C8FF00] border-[#222222] bg-[#1A1A1A] shadow-md' 
+        : 'border-[#222222] bg-[#141414]'
+    } transition-all max-w-[130px] sm:max-w-[170px]`}>
+      <span className="text-[9px] font-mono uppercase text-[#A0A0A0] tracking-wider mb-1">{stepNum}</span>
+      <div className="mb-1.5">{icon}</div>
+      <span className="text-[10px] sm:text-xs font-bold tracking-tight uppercase text-white truncate max-w-full">
         {label}
+      </span>
+      <span className="text-[9px] font-mono text-[#555555] truncate max-w-full mt-0.5 hidden sm:block">
+        {sub}
       </span>
     </div>
   );
@@ -58,14 +137,8 @@ function WorkflowNode({ label, icon, highlight = false }: { label: string, icon:
 function WorkflowConnector() {
   return (
     <div className="flex flex-1 items-center justify-center relative px-1 sm:px-2">
-      <div className="h-[2px] w-full bg-foreground/10 relative overflow-hidden">
-        <motion.div 
-          className="absolute top-0 left-0 h-full w-1/2 bg-accent"
-          animate={{ x: ["-100%", "200%"] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-        />
-      </div>
-      <div className="absolute right-0 w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-foreground/20"></div>
+      <div className="h-[2px] w-full bg-gradient-to-r from-[#222222] via-[#C8FF00]/40 to-[#222222]" />
+      <span className="text-[#C8FF00] text-xs font-mono select-none px-1">→</span>
     </div>
   );
 }

@@ -573,67 +573,49 @@ export default function WorkflowReviewApproval({
         />
       </div>
 
-      {/* SECTION 4: THE MANDATED ACTIONS (Edit, Regenerate, Approve) */}
-      <div className="border border-white/12 bg-gradient-to-br from-[#131926] via-[#0f1420] to-[#0a0e17] backdrop-blur-md p-6 rounded-sm shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-          
-          {/* Action 1: Edit Workflow */}
-          <button
-            type="button"
-            onClick={() => setIsEditing(!isEditing)}
-            className={`flex items-center justify-center gap-2 px-6 py-4 text-xs font-bold uppercase tracking-[0.2em] border transition-all duration-200 rounded-sm ${
-              isEditing
-                ? "bg-accent text-background border-accent hover:brightness-110 font-bold"
-                : "border-white/15 bg-[#161e2e] text-slate-200 hover:text-white hover:bg-[#1c273a] hover:border-white/30"
-            }`}
-          >
-            <Edit3 className="w-4 h-4" />
-            {isEditing ? "Done Editing" : "Edit Workflow"}
-          </button>
-
-          {/* Action 2: Regenerate Workflow */}
+      {/* SECTION 4: 3 BOTTOM ACTION BUTTONS (PRD v3.1 Spec) */}
+      <div className="sticky bottom-4 z-40 bg-[#0A0A0A]/95 backdrop-blur-md p-3 sm:p-4 rounded-lg border border-[#222222] shadow-2xl">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
+          {/* Button 1: REGENERATE */}
           <button
             type="button"
             onClick={onRegenerate}
             disabled={isApproving}
-            className="flex items-center justify-center gap-2 px-6 py-4 text-xs font-bold uppercase tracking-[0.2em] border border-white/15 bg-[#161e2e] text-slate-200 hover:text-white hover:bg-[#1c273a] hover:border-white/30 transition-all duration-200 rounded-sm disabled:opacity-50"
+            className="flex items-center justify-center gap-2 py-3.5 px-4 text-xs font-mono font-bold uppercase tracking-wider bg-[#111111] hover:bg-[#1A1A1A] border border-white/30 hover:border-white text-white rounded transition-all disabled:opacity-50"
           >
-            <RefreshCw className="w-4 h-4" />
-            Regenerate Workflow
+            <RefreshCw className={`w-3.5 h-3.5 ${isApproving ? "animate-spin" : ""}`} />
+            <span>🔄 REGENERATE</span>
           </button>
 
-          {/* Action 2.5: Claim To Workspace if unauthenticated */}
-          {!user && (
-            <button
-              type="button"
-              onClick={() => {
-                fetch("/api/automation/draft", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ workflow }),
-                });
-                openAuthModal("signup");
-              }}
-              className="flex items-center justify-center gap-2 px-6 py-4 text-xs font-bold uppercase tracking-[0.2em] border border-accent/40 bg-accent/10 text-accent hover:bg-accent/20 transition-all duration-200 rounded-sm"
-            >
-              <Sparkles className="w-4 h-4 text-accent" />
-              Claim To Workspace
-            </button>
-          )}
+          {/* Button 2: EDIT STEPS */}
+          <button
+            type="button"
+            onClick={() => setIsEditing(!isEditing)}
+            className={`flex items-center justify-center gap-2 py-3.5 px-4 text-xs font-mono font-bold uppercase tracking-wider rounded border transition-all ${
+              isEditing
+                ? "bg-[#FFD600] text-black border-[#FFD600] font-black"
+                : "bg-[#111111] hover:bg-[#1A1A1A] border-[#FFD600]/60 hover:border-[#FFD600] text-[#FFD600]"
+            }`}
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            <span>{isEditing ? "SAVE EDITS" : "✏️ EDIT STEPS"}</span>
+          </button>
 
-          {/* Action 3: Approve Workflow */}
+          {/* Button 3: APPROVE WORKFLOW (PRIMARY CTA) */}
           <button
             type="button"
             onClick={handleApproveWorkflow}
             disabled={isApproving || !validation.isValid}
-            className="flex items-center justify-center gap-2 px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] bg-accent text-background hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 rounded-sm shadow-[0_0_20px_rgba(204,255,0,0.25)]"
+            className="flex items-center justify-center gap-2 py-3.5 px-4 text-xs font-mono font-bold uppercase tracking-wider bg-[#C8FF00] hover:bg-[#b2e600] text-black disabled:opacity-40 disabled:cursor-not-allowed rounded transition-all shadow-lg shadow-[#C8FF00]/15"
           >
-            <ShieldCheck className="w-4 h-4" />
-            {isApproving
-              ? "Validating & Staging..."
-              : approvalConfirmed
-              ? "Re-Approve Workflow"
-              : "Approve Workflow"}
+            <CheckCircle2 className="w-4 h-4 text-black" />
+            <span>
+              {isApproving
+                ? "STAGING..."
+                : approvalConfirmed
+                ? "RE-APPROVE"
+                : "✅ APPROVE WORKFLOW"}
+            </span>
           </button>
         </div>
       </div>

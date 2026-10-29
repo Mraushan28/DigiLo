@@ -2,19 +2,16 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import { Workflow } from "@/types/automation";
 import { useAuth } from "@/components/auth/AuthContext";
 import { 
-  Sparkles, 
-  Layers, 
-  Activity, 
-  Play, 
-  Pause, 
+  Bot,
+  LayoutDashboard,
+  Plug,
+  Settings,
+  HelpCircle,
   Plus, 
   Search, 
-  Filter, 
   ArrowRight, 
   CheckCircle2, 
   AlertCircle, 
@@ -22,9 +19,13 @@ import {
   Database, 
   MessageSquare, 
   Mail,
-  ExternalLink,
-  ShieldCheck,
-  RefreshCw
+  RefreshCw,
+  LogOut,
+  Sparkles,
+  Layers,
+  ChevronLeft,
+  ChevronRight,
+  Zap
 } from "lucide-react";
 
 interface WorkflowItem extends Workflow {
@@ -34,11 +35,12 @@ interface WorkflowItem extends Workflow {
 }
 
 export default function DashboardOverviewPage() {
-  const { user, workspace, isLoading: isAuthLoading, openAuthModal } = useAuth();
+  const { user, workspace, isLoading: isAuthLoading, openAuthModal, logout } = useAuth();
   const [workflows, setWorkflows] = useState<WorkflowItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const fetchWorkflows = async () => {
     try {
@@ -74,328 +76,344 @@ export default function DashboardOverviewPage() {
   });
 
   const activeCount = workflows.filter((w) => w.status === "active").length;
-  const totalExecutions = workflows.reduce((sum, w) => sum + (w.executionCount || 0), 0);
+  const draftCount = workflows.filter((w) => w.status === "draft" || w.status === "setup_required").length;
+  const failedCount = workflows.filter((w) => w.status === "failed").length;
 
   const getStepIcon = (action: string) => {
-    if (action.includes("ai")) return <Sparkles className="w-3.5 h-3.5 text-accent" />;
-    if (action.includes("sheet")) return <Database className="w-3.5 h-3.5 text-emerald-400" />;
-    if (action.includes("slack")) return <MessageSquare className="w-3.5 h-3.5 text-cyan-400" />;
-    if (action.includes("gmail") || action.includes("mail")) return <Mail className="w-3.5 h-3.5 text-amber-400" />;
-    return <Layers className="w-3.5 h-3.5 text-foreground/70" />;
+    if (action.includes("ai")) return <Sparkles className="w-3.5 h-3.5 text-[#3B82F6]" />;
+    if (action.includes("sheets")) return <Database className="w-3.5 h-3.5 text-[#22C55E]" />;
+    if (action.includes("slack")) return <MessageSquare className="w-3.5 h-3.5 text-[#A855F7]" />;
+    if (action.includes("gmail")) return <Mail className="w-3.5 h-3.5 text-[#EF4444]" />;
+    return <Layers className="w-3.5 h-3.5 text-[#C8FF00]" />;
   };
 
-  if (isAuthLoading) {
+  if (!user && !isAuthLoading) {
     return (
-      <>
-        <Navbar />
-        <main className="flex-1 flex flex-col items-center justify-center pt-28 pb-20 bg-background min-h-screen text-center px-6">
-          <Activity className="w-8 h-8 text-accent animate-spin mb-3" />
-          <p className="text-xs font-mono text-foreground/60">Verifying workspace session...</p>
-        </main>
-        <Footer />
-      </>
-    );
-  }
-
-  if (!user) {
-    return (
-      <>
-        <Navbar />
-        <main className="flex-1 flex flex-col items-center justify-center pt-28 pb-20 bg-background min-h-screen text-center px-6">
-          <div className="max-w-md w-full border border-foreground/15 bg-background/90 p-8 rounded-sm shadow-2xl flex flex-col items-center space-y-6">
-            <div className="w-14 h-14 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center">
-              <ShieldCheck className="w-7 h-7 text-accent" />
-            </div>
-            <div>
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-bold text-accent block mb-2">
-                AUTHENTICATION REQUIRED
-              </span>
-              <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-foreground">
-                Workspace Access Restricted
-              </h1>
-              <p className="text-xs text-foreground/60 mt-2 leading-relaxed font-normal">
-                You must be signed in to access the Enterprise Automation Dashboard.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
-              <button
-                type="button"
-                id="btn-dashboard-signin"
-                onClick={() => openAuthModal("login")}
-                className="w-full flex-1 py-2.5 bg-accent text-background text-xs font-mono font-bold uppercase tracking-wider rounded-sm hover:brightness-110 shadow-lg transition-all"
-              >
-                Sign In to Workspace
-              </button>
-              <Link
-                href="/"
-                className="w-full sm:w-auto px-4 py-2.5 border border-foreground/15 text-foreground/70 hover:text-foreground text-xs font-mono uppercase rounded-sm transition-colors text-center"
-              >
-                Home
-              </Link>
-            </div>
+      <div className="min-h-screen bg-[#0A0A0A] text-white flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-md p-8 rounded-lg bg-[#111111] border border-[#222222] text-center shadow-2xl">
+          <div className="w-12 h-12 rounded-full bg-[#C8FF00]/10 border border-[#C8FF00]/30 flex items-center justify-center text-[#C8FF00] mx-auto mb-4">
+            <Bot className="w-6 h-6" />
           </div>
-        </main>
-        <Footer />
-      </>
+          <h2 className="text-xl font-bold uppercase tracking-tight text-white mb-2">
+            Sign In to Access Dashboard
+          </h2>
+          <p className="text-xs text-[#A0A0A0] leading-relaxed mb-6">
+            Authentication is required to view your tenant workspace, active automations, and live execution telemetry.
+          </p>
+          <div className="flex flex-col gap-3">
+            <Link
+              href="/auth"
+              className="w-full py-3 bg-[#C8FF00] hover:bg-[#b2e600] text-black text-xs font-bold uppercase tracking-wider rounded transition-all shadow-md"
+            >
+              Sign In to Workspace
+            </Link>
+            <Link
+              href="/"
+              className="w-full py-2.5 border border-[#222222] text-[#A0A0A0] hover:text-white text-xs font-mono uppercase rounded transition-colors"
+            >
+              Back to Home
+            </Link>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <>
-      <Navbar />
-      <main className="flex-1 flex flex-col pt-24 pb-20 bg-background min-h-screen">
-        <div className="container mx-auto px-6 max-w-7xl flex flex-col gap-8">
-          
-          {/* Header Banner */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-foreground/10">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-bold px-2 py-0.5 rounded-sm bg-accent/10 border border-accent/30 text-accent">
-                  ENTERPRISE CONTROL PLANE
-                </span>
-                <span className="text-xs font-mono text-foreground/50">
-                  {workspace?.name || "Client Workspace"}
-                </span>
+    <div className="min-h-screen bg-[#0A0A0A] text-white flex flex-col md:flex-row">
+      {/* Sidebar (PRD v3.1 Spec) */}
+      <aside 
+        className={`bg-[#0D0D0D] border-r border-[#222222] flex flex-col justify-between transition-all duration-300 z-30 ${
+          sidebarCollapsed ? "w-full md:w-20" : "w-full md:w-64"
+        } shrink-0`}
+      >
+        <div>
+          {/* Logo Bar */}
+          <div className="p-6 border-b border-[#222222] flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2">
+              <span className="text-xl font-black tracking-tight text-white">
+                DIGIL<span className="text-[#C8FF00]">O</span>
+              </span>
+            </Link>
+            <button
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="hidden md:flex p-1.5 rounded hover:bg-[#1A1A1A] text-[#A0A0A0] hover:text-white transition-colors"
+              title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            </button>
+          </div>
+
+          {/* Navigation Items (PRD v3.1 Spec) */}
+          <nav className="p-4 space-y-1.5 font-mono text-xs">
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-3 px-3 py-2.5 rounded bg-[#1A1A1A] border-l-2 border-[#C8FF00] text-white font-bold transition-colors"
+            >
+              <Bot className="w-4 h-4 text-[#C8FF00] shrink-0" />
+              {!sidebarCollapsed && <span>🤖 AI AUTOMATIONS</span>}
+            </Link>
+
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-3 px-3 py-2.5 rounded text-[#A0A0A0] hover:text-white hover:bg-[#141414] transition-colors"
+            >
+              <LayoutDashboard className="w-4 h-4 shrink-0" />
+              {!sidebarCollapsed && <span>📊 DASHBOARD</span>}
+            </Link>
+
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-3 px-3 py-2.5 rounded text-[#A0A0A0] hover:text-white hover:bg-[#141414] transition-colors"
+            >
+              <Plug className="w-4 h-4 shrink-0" />
+              {!sidebarCollapsed && <span>🔌 INTEGRATIONS</span>}
+            </Link>
+
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-3 px-3 py-2.5 rounded text-[#A0A0A0] hover:text-white hover:bg-[#141414] transition-colors"
+            >
+              <Settings className="w-4 h-4 shrink-0" />
+              {!sidebarCollapsed && <span>⚙️ SETTINGS</span>}
+            </Link>
+
+            <a
+              href="https://wa.me/917707052307"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-3 py-2.5 rounded text-[#A0A0A0] hover:text-white hover:bg-[#141414] transition-colors"
+            >
+              <HelpCircle className="w-4 h-4 shrink-0" />
+              {!sidebarCollapsed && <span>💬 SUPPORT</span>}
+            </a>
+          </nav>
+        </div>
+
+        {/* User Workspace Info at Bottom */}
+        <div className="p-4 border-t border-[#222222] bg-[#0A0A0A]">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-full bg-[#1A1A1A] border border-[#222222] flex items-center justify-center text-xs font-bold text-[#C8FF00] shrink-0">
+                {user?.name?.charAt(0) || "U"}
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-foreground">
-                Automation Dashboard
-              </h1>
-              <p className="text-xs sm:text-sm text-foreground/60 max-w-xl font-normal mt-1">
-                Monitor live automations, test isolated dry runs, inspect execution traces, and optimize pipelines.
-              </p>
+              {!sidebarCollapsed && (
+                <div className="min-w-0">
+                  <p className="text-xs font-bold text-white truncate">{user?.name || "Operator"}</p>
+                  <p className="text-[10px] font-mono text-[#A0A0A0] truncate">{workspace?.name || "Workspace"}</p>
+                </div>
+              )}
             </div>
 
-            <div className="flex items-center gap-3">
+            <button
+              onClick={logout}
+              className="p-1.5 rounded hover:bg-[#1A1A1A] text-[#A0A0A0] hover:text-[#EF4444] transition-colors shrink-0"
+              title="Sign Out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <main className="flex-1 p-6 lg:p-10 max-w-7xl mx-auto w-full">
+        {/* Header Row (PRD v3.1 Spec) */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#222222] mb-8">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-mono font-bold tracking-tight uppercase text-white mb-2">
+              MY AUTOMATIONS
+            </h1>
+            {/* Stats Chips (PRD v3.1 Spec) */}
+            <div className="flex items-center gap-2 font-mono text-xs">
+              <span className="px-2.5 py-1 rounded bg-[#22C55E]/15 border border-[#22C55E]/30 text-[#22C55E] font-bold">
+                {activeCount} ACTIVE
+              </span>
+              <span className="px-2.5 py-1 rounded bg-[#1A1A1A] border border-[#222222] text-[#A0A0A0]">
+                {draftCount} DRAFT
+              </span>
+              <span className="px-2.5 py-1 rounded bg-[#EF4444]/15 border border-[#EF4444]/30 text-[#EF4444]">
+                {failedCount} FAILED
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              id="btn-refresh-workflows"
+              onClick={fetchWorkflows}
+              className="p-3 rounded-lg border border-[#222222] text-[#A0A0A0] hover:text-white hover:bg-[#111111] transition-colors"
+              title="Refresh Workflows"
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
+            </button>
+            <Link
+              href="/automation"
+              id="btn-new-automation-link"
+              className="flex items-center gap-2 px-5 py-3 bg-[#C8FF00] hover:bg-[#b2e600] text-black text-xs font-bold uppercase tracking-wider rounded transition-all shadow-lg shadow-[#C8FF00]/15"
+            >
+              <Plus className="w-4 h-4" />
+              <span>+ New Automation</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Search & Filter Bar */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-8">
+          <div className="relative flex-1 max-w-md">
+            <Search className="w-4 h-4 text-[#555555] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              id="input-search-workflows"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search workflows by name or description..."
+              className="w-full bg-[#111111] border border-[#222222] focus:border-[#C8FF00] pl-10 pr-4 py-2.5 text-xs font-mono rounded-lg outline-none text-white transition-colors"
+            />
+          </div>
+
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+            {[
+              { id: "all", label: "ALL" },
+              { id: "active", label: "ACTIVE" },
+              { id: "draft", label: "DRAFT" },
+              { id: "setup_required", label: "SETUP REQUIRED" },
+              { id: "failed", label: "FAILED" },
+            ].map((st) => (
               <button
+                key={st.id}
                 type="button"
-                id="btn-refresh-workflows"
-                onClick={fetchWorkflows}
-                className="p-2.5 rounded-sm border border-foreground/15 text-foreground/70 hover:text-foreground hover:bg-foreground/5 transition-colors"
-                title="Refresh Workflows"
+                onClick={() => setStatusFilter(st.id)}
+                className={`px-3 py-1.5 text-[11px] font-mono uppercase tracking-wider rounded transition-all shrink-0 ${
+                  statusFilter === st.id
+                    ? "bg-[#C8FF00] text-black font-bold"
+                    : "bg-[#111111] text-[#A0A0A0] hover:text-white border border-[#222222]"
+                }`}
               >
-                <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
+                {st.label}
               </button>
-              <Link
-                href="/automation"
-                id="btn-new-automation-link"
-                className="flex items-center gap-2 px-5 py-2.5 bg-accent text-background text-xs font-mono font-bold uppercase tracking-wider rounded-sm hover:brightness-110 shadow-lg transition-all"
-              >
-                <Plus className="w-4 h-4" />
-                <span>New Automation</span>
-              </Link>
-            </div>
+            ))}
           </div>
+        </div>
 
-          {/* KPI Summary Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="border border-foreground/15 bg-background/80 p-5 rounded-sm shadow-sm">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-foreground/50 block mb-1">
-                Total Workflows
-              </span>
-              <p className="text-3xl font-bold font-mono text-foreground">
-                {workflows.length}
-              </p>
-              <span className="text-[10px] font-mono text-foreground/40 mt-1 block">
-                Staged & configured
-              </span>
-            </div>
-
-            <div className="border border-foreground/15 bg-background/80 p-5 rounded-sm shadow-sm">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-foreground/50 block mb-1">
-                Active Production
-              </span>
-              <p className="text-3xl font-bold font-mono text-accent">
-                {activeCount}
-              </p>
-              <span className="text-[10px] font-mono text-accent/70 mt-1 block">
-                Listening for triggers
-              </span>
-            </div>
-
-            <div className="border border-foreground/15 bg-background/80 p-5 rounded-sm shadow-sm">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-foreground/50 block mb-1">
-                Total Runs
-              </span>
-              <p className="text-3xl font-bold font-mono text-foreground">
-                {totalExecutions.toLocaleString()}
-              </p>
-              <span className="text-[10px] font-mono text-foreground/40 mt-1 block">
-                Verified telemetry
-              </span>
-            </div>
-
-            <div className="border border-foreground/15 bg-background/80 p-5 rounded-sm shadow-sm">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-foreground/50 block mb-1">
-                Integrations Vault
-              </span>
-              <p className="text-3xl font-bold font-mono text-emerald-400">
-                AES-256
-              </p>
-              <span className="text-[10px] font-mono text-emerald-400/70 mt-1 block">
-                Encrypted at rest
-              </span>
-            </div>
+        {/* Workflows Grid / Cards (2-col desktop, 1-col mobile per PRD v3.1 Spec) */}
+        {isLoading ? (
+          <div className="py-24 flex flex-col items-center justify-center text-center space-y-3">
+            <RefreshCw className="w-8 h-8 text-[#C8FF00] animate-spin" />
+            <p className="text-xs font-mono text-[#A0A0A0]">Loading tenant workflows...</p>
           </div>
-
-          {/* Workflows Search & Filter Bar */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-            <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 text-foreground/40 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                id="input-search-workflows"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search workflows by name or description..."
-                className="w-full bg-background border border-foreground/20 pl-9 pr-3 py-2 text-xs font-mono rounded-sm focus:outline-none focus:border-accent"
-              />
-            </div>
-
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-              {[
-                { id: "all", label: "All" },
-                { id: "active", label: "Production" },
-                { id: "paused", label: "Paused" },
-                { id: "setup_required", label: "Setup Required" },
-                { id: "draft", label: "Draft" },
-              ].map((st) => (
-                <button
-                  key={st.id}
-                  type="button"
-                  onClick={() => setStatusFilter(st.id)}
-                  className={`px-3 py-1.5 text-[11px] font-mono uppercase tracking-wider rounded-sm transition-all shrink-0 ${
-                    statusFilter === st.id
-                      ? "bg-accent text-background font-bold"
-                      : "bg-foreground/5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 border border-foreground/10"
-                  }`}
-                >
-                  {st.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Workflows Grid / Cards */}
-          {isLoading ? (
-            <div className="py-20 flex flex-col items-center justify-center text-center space-y-3">
-              <Activity className="w-8 h-8 text-accent animate-spin" />
-              <p className="text-xs font-mono text-foreground/60">
-                Loading tenant workflows from control plane...
-              </p>
-            </div>
-          ) : filteredWorkflows.length === 0 ? (
-            <div className="border border-foreground/15 bg-background/50 rounded-sm py-16 px-6 text-center flex flex-col items-center justify-center space-y-4">
-              <div className="w-14 h-14 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
-                <Sparkles className="w-6 h-6" />
-              </div>
-              <h3 className="text-base font-bold uppercase tracking-wider text-foreground">
-                No Workflows Found
+        ) : filteredWorkflows.length === 0 ? (
+          /* Empty State with Node Graph SVG illustration per PRD v3.1 Spec */
+          <div className="border border-[#222222] bg-[#111111] rounded-lg py-20 px-6 text-center flex flex-col items-center justify-center space-y-6">
+            <svg className="w-24 h-24 text-[#C8FF00]/40 mx-auto" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+              <circle cx="20" cy="50" r="10" strokeWidth="2" fill="#1A1A1A" />
+              <line x1="30" y1="50" x2="45" y2="50" strokeWidth="2" strokeDasharray="4 2" />
+              <circle cx="55" cy="50" r="10" strokeWidth="2" fill="#1A1A1A" />
+              <line x1="65" y1="50" x2="80" y2="50" strokeWidth="2" strokeDasharray="4 2" />
+              <circle cx="90" cy="50" r="10" strokeWidth="2" fill="#1A1A1A" />
+            </svg>
+            <div>
+              <h3 className="text-xl font-bold uppercase tracking-tight text-white mb-2">
+                No automations yet
               </h3>
-              <p className="text-xs sm:text-sm text-foreground/50 max-w-md font-normal leading-relaxed">
-                Describe a business workflow in natural language, and DIGILO AI will formulate triggers, pipeline steps, and execute it.
+              <p className="text-sm text-[#A0A0A0] max-w-md mx-auto">
+                Describe what you want to automate and DIGILO will build it for you.
               </p>
-              <Link
-                href="/automation"
-                className="mt-2 inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-background text-xs font-mono font-bold uppercase tracking-wider rounded-sm hover:brightness-110 shadow-md"
-              >
-                <span>Formulate First Automation</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filteredWorkflows.map((wf) => {
-                const isActive = wf.status === "active";
-                const isPaused = wf.status === "paused";
-                const isSetupReq = wf.status === "setup_required";
+            <Link
+              href="/automation"
+              className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#C8FF00] hover:bg-[#b2e600] text-black text-sm font-bold uppercase tracking-wider rounded transition-all shadow-xl shadow-[#C8FF00]/15"
+            >
+              <Plus className="w-4 h-4" />
+              <span>+ Create Your First Automation</span>
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {filteredWorkflows.map((wf) => {
+              const isActive = wf.status === "active";
+              const isSetupReq = wf.status === "setup_required";
+              const isFailed = wf.status === "failed";
 
-                return (
-                  <div
-                    key={wf.id}
-                    id={`workflow-card-${wf.id}`}
-                    className="border border-foreground/15 hover:border-accent/50 bg-background/90 rounded-sm p-5 shadow-lg hover:shadow-accent/5 transition-all flex flex-col justify-between gap-5 group"
-                  >
-                    <div>
-                      {/* Top Bar with Status Badge & Version */}
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <span
-                          className={`px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider font-bold rounded-sm border ${
-                            isActive
-                              ? "bg-accent/15 border-accent text-accent"
-                              : isPaused
-                              ? "bg-yellow-500/15 border-yellow-500/40 text-yellow-400"
-                              : isSetupReq
-                              ? "bg-amber-500/15 border-amber-500 text-amber-300"
-                              : "bg-foreground/10 border-foreground/20 text-foreground/70"
-                          }`}
-                        >
-                          {isActive ? "PRODUCTION" : isPaused ? "PAUSED" : isSetupReq ? "SETUP REQUIRED" : "DRAFT"}
-                        </span>
+              return (
+                <div
+                  key={wf.id}
+                  id={`workflow-card-${wf.id}`}
+                  className="border border-[#222222] hover:border-[#C8FF00]/50 bg-[#111111] rounded-lg p-6 shadow-xl transition-all flex flex-col justify-between gap-5 group"
+                >
+                  <div>
+                    {/* Header: Status Badge & Version */}
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span
+                        className={`px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider font-bold rounded ${
+                          isActive
+                            ? "bg-[#C8FF00] text-black"
+                            : isSetupReq
+                            ? "bg-[#FFD600] text-black"
+                            : isFailed
+                            ? "bg-[#EF4444] text-white"
+                            : "bg-[#1A1A1A] text-white border border-[#222222]"
+                        }`}
+                      >
+                        {isActive ? "ACTIVE" : isSetupReq ? "SETUP REQUIRED" : isFailed ? "FAILED" : "DRAFT"}
+                      </span>
 
-                        <span className="text-[10px] font-mono text-foreground/40">
-                          {wf.version || "v1.0.0"}
-                        </span>
-                      </div>
+                      <span className="text-[10px] font-mono text-[#555555]">
+                        {wf.version || "v1.0.0"}
+                      </span>
+                    </div>
 
-                      {/* Workflow Name */}
-                      <h3 className="text-base font-bold uppercase tracking-tight text-foreground group-hover:text-accent transition-colors line-clamp-1">
-                        {wf.name}
-                      </h3>
+                    {/* Workflow Name */}
+                    <h3 className="text-lg font-bold text-white group-hover:text-[#C8FF00] transition-colors truncate">
+                      {wf.name}
+                    </h3>
 
-                      {/* Workflow Description */}
-                      <p className="text-xs text-foreground/60 line-clamp-2 mt-1.5 leading-relaxed font-normal">
-                        {wf.description}
-                      </p>
+                    {/* Workflow Description */}
+                    <p className="text-xs text-[#A0A0A0] line-clamp-2 mt-2 leading-relaxed">
+                      {wf.description}
+                    </p>
 
-                      {/* Trigger Badge */}
-                      <div className="mt-4 flex items-center gap-2 text-[10px] font-mono text-foreground/70 bg-foreground/[0.03] px-2.5 py-1.5 rounded-sm border border-foreground/10">
-                        <Radio className="w-3 h-3 text-accent shrink-0" />
-                        <span className="truncate">{wf.trigger.source || "Webhook"}: {wf.trigger.event}</span>
-                      </div>
-
-                      {/* Action Steps Mini Pipeline */}
-                      <div className="mt-3 flex items-center gap-1.5 overflow-x-auto py-1">
+                    {/* Integration Icons Row (PRD v3.1 Spec) */}
+                    <div className="mt-4 flex items-center gap-2">
+                      <span className="text-[10px] font-mono uppercase text-[#555555] mr-1">Tools:</span>
+                      <div className="flex items-center gap-1.5 overflow-x-auto">
+                        <div className="p-1 rounded bg-[#1A1A1A] border border-[#222222]" title="Webhook Trigger">
+                          <Zap className="w-3.5 h-3.5 text-[#C8FF00]" />
+                        </div>
                         {wf.steps.map((st, i) => (
                           <div
                             key={st.id || i}
-                            className="flex items-center gap-1 px-2 py-1 bg-foreground/5 border border-foreground/10 rounded-sm text-[10px] font-mono text-foreground/80 shrink-0"
+                            className="p-1 rounded bg-[#1A1A1A] border border-[#222222]"
                             title={`${st.name} (${st.action})`}
                           >
                             {getStepIcon(st.action)}
-                            <span className="truncate max-w-[80px]">{st.action.split(".")[0]}</span>
                           </div>
                         ))}
                       </div>
                     </div>
-
-                    {/* Bottom Metadata & Studio Action */}
-                    <div className="pt-4 border-t border-foreground/10 flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 text-[10px] font-mono text-foreground/50">
-                        <span>{wf.executionCount || 0} runs</span>
-                        <span>•</span>
-                        <span className={wf.successRate ? "text-accent" : ""}>
-                          {wf.successRate !== null && wf.successRate !== undefined ? `${wf.successRate}%` : "N/A"}
-                        </span>
-                      </div>
-
-                      <Link
-                        href={`/dashboard/workflows/${wf.id}`}
-                        id={`btn-open-studio-${wf.id}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-foreground/10 hover:bg-accent hover:text-background text-foreground text-xs font-mono font-bold uppercase tracking-wider rounded-sm transition-all"
-                      >
-                        <span>Open Studio</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
                   </div>
-                );
-              })}
-            </div>
-          )}
 
-        </div>
+                  {/* Card Footer: Run Stats & View Details CTA (PRD v3.1 Spec) */}
+                  <div className="pt-4 border-t border-[#222222] flex items-center justify-between gap-2">
+                    <div className="text-[11px] font-mono text-[#A0A0A0]">
+                      {wf.executionCount || 0} runs · {wf.successRate !== null && wf.successRate !== undefined ? `${wf.successRate}%` : "100%"} success
+                    </div>
+
+                    <Link
+                      href={`/dashboard/workflows/${wf.id}`}
+                      id={`btn-view-details-${wf.id}`}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 border border-[#C8FF00] text-[#C8FF00] hover:bg-[#C8FF00] hover:text-black text-xs font-mono font-bold uppercase tracking-wider rounded transition-all"
+                    >
+                      <span>View Details →</span>
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </main>
-      <Footer />
-    </>
+    </div>
   );
 }
