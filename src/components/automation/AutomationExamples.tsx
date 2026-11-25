@@ -1,9 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MessageSquare, FileText, BarChart3, Users, Network, Briefcase } from "lucide-react";
+import { MessageSquare, FileText, BarChart3, Users, Network, Briefcase, Video } from "lucide-react";
 
 const examples = [
+  {
+    title: "AI Social Video & Auto-Publish",
+    icon: <Video className="w-5 h-5 text-accent" />,
+    flow: ["Topic Prompt", "ChatGPT Script", "AI Voiceover", "Video Template", "Auto-Post (YouTube & Reels)"]
+  },
   {
     title: "Lead Management",
     icon: <Users className="w-5 h-5" />,

@@ -146,6 +146,102 @@ export default function Services() {
             </div>
           </div>
         </div>
+
+        {/* 03 - DIGITAL MARKETING & CONTENT AUTOMATION */}
+        <div className="border-t border-foreground/20 pt-24 mt-24">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 mb-16">
+            <div className="lg:w-1/3">
+              <span className="text-xl md:text-3xl font-mono text-accent mb-4 block">03</span>
+              <h3 className="text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tighter leading-none text-accent">
+                DIGITAL MARKETING
+              </h3>
+            </div>
+            <div className="lg:w-2/3">
+              <h4 className="text-2xl md:text-3xl font-bold uppercase tracking-tight mb-6 text-foreground">
+                Data-Driven Performance Marketing, AI Video Pipelines & Multi-Channel Growth.
+              </h4>
+              <p className="text-lg md:text-xl text-foreground/80 font-normal mb-8 max-w-3xl leading-relaxed">
+                Supercharge customer acquisition and brand visibility. We combine data-backed performance advertising with automated AI video pipelines that generate scripts, record voiceovers, render template-based videos, and publish them sequentially across YouTube Shorts, Instagram Reels, TikTok, and LinkedIn.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                {[
+                  "AI Social Video Pipeline (Script → Voice → Video → Auto-Post)",
+                  "Multi-Channel Social Scheduling (YouTube, Instagram, TikTok, LinkedIn)",
+                  "High-ROI Performance Ads (Meta, Google, YouTube, LinkedIn Ads)",
+                  "Programmatic & Technical SEO (Organic Search Visibility)",
+                  "Automated Email & WhatsApp Retention Sequences",
+                  "Conversion Rate Optimization (Landing Pages & A/B Testing)",
+                  "Content Repurposing (Blogs to Short-Form Viral Videos)",
+                  "End-to-End Marketing Analytics & Attribution Tracking"
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-3 p-3.5 border border-foreground/10 bg-foreground/[0.02] rounded-sm">
+                    <span className="w-1.5 h-1.5 bg-accent rounded-full shrink-0" />
+                    <span className="text-sm font-medium text-foreground/85">{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-4">
+                <Link 
+                  href="/automation"
+                  className="inline-flex items-center gap-3 bg-accent text-background px-8 py-4 font-bold uppercase tracking-widest hover:bg-white transition-colors"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Try AI Video Automation Studio &rarr;
+                </Link>
+                <a 
+                  href="#contact" 
+                  className="inline-flex items-center gap-3 bg-transparent border border-foreground/30 text-foreground px-8 py-4 font-bold uppercase tracking-widest hover:border-accent hover:text-accent transition-colors"
+                >
+                  Discuss Digital Marketing &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Social Video Transformation Visual */}
+          <div className="bg-foreground/5 border border-foreground/10 p-8 md:p-12 rounded-2xl overflow-hidden relative">
+            <h5 className="text-xs font-mono uppercase tracking-[0.2em] text-foreground/50 mb-8 font-semibold">
+              AI SOCIAL VIDEO AUTOMATION PIPELINE (ZAPIER-STYLE SEQUENCE)
+            </h5>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div>
+                <h6 className="text-xs font-mono uppercase tracking-[0.2em] text-foreground/40 mb-6">
+                  TRADITIONAL VIDEO CREATION (Hours of Manual Work)
+                </h6>
+                <div className="flex flex-col gap-3">
+                  <FlowStep text="Brainstorm Video Idea" />
+                  <FlowArrow />
+                  <FlowStep text="Manually Write Script in Docs" />
+                  <FlowArrow />
+                  <FlowStep text="Record & Re-record Voice" />
+                  <FlowArrow />
+                  <FlowStep text="Edit Video, Add Captions in Premiere" />
+                  <FlowArrow />
+                  <FlowStep text="Manual Upload to YouTube, Reels, TikTok" />
+                </div>
+              </div>
+              <div className="relative">
+                <div className="absolute top-0 bottom-0 -left-6 w-px bg-foreground/10 hidden lg:block"></div>
+                <h6 className="text-xs font-mono uppercase tracking-[0.2em] text-accent mb-6">
+                  DIGILO AI AUTOMATED SEQUENCE (Done in 60 Seconds)
+                </h6>
+                <div className="flex flex-col gap-3">
+                  <FlowStep text="1. Trigger: Scheduled Topic or Article" active />
+                  <FlowArrow active />
+                  <FlowStep text="2. ChatGPT Script Generator (Hooks & Cues)" active />
+                  <FlowArrow active />
+                  <FlowStep text="3. AI Voiceover Engine (Studio Audio)" active />
+                  <FlowArrow active />
+                  <FlowStep text="4. Template Video Renderer (Animated Captions)" active />
+                  <FlowArrow active />
+                  <FlowStep text="5. Auto-Upload: YouTube Shorts, Reels, TikTok" active />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

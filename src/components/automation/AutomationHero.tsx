@@ -256,6 +256,18 @@ export default function AutomationHero() {
               >
                 Lead → Gmail Alert
               </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPrompt(
+                    "Generate a short video script from topic using ChatGPT, generate AI voiceover audio, render video from template with animated captions, and auto-publish to YouTube Shorts and Instagram."
+                  );
+                  if (validationError) setValidationError(null);
+                }}
+                className="text-xs font-mono text-[#C8FF00] hover:text-white hover:border-[#C8FF00] bg-[#C8FF00]/10 hover:bg-[#C8FF00]/20 px-3 py-1.5 rounded border border-[#C8FF00]/40 transition-all font-semibold"
+              >
+                ✨ Script → Voice → Video → Social Sequence
+              </button>
             </div>
 
             {/* Full-width Lime CTA Button (PRD v3.1 Spec) */}

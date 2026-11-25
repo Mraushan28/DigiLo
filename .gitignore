@@ -46,3 +46,6 @@ scratch/
 
 # local persistent data
 /.data/
+
+# user local media
+my_video/

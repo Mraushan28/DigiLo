@@ -8,6 +8,7 @@ export type IntegrationCategory =
   | "Trigger & Ingestion"
   | "Email & Communication"
   | "CRM & Sales"
+  | "Content & Social Media"
   | "E-Commerce";
 
 export type AuthMethodType = "oauth2" | "api_key" | "none";

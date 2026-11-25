@@ -8,6 +8,7 @@ import { openaiIntegration } from "./integrations/openai";
 import { googleSheetsIntegration } from "./integrations/google-sheets";
 import { slackIntegration } from "./integrations/slack";
 import { gmailIntegration } from "./integrations/gmail";
+import { socialVideoIntegration } from "./integrations/social-video";
 import { Workflow } from "@/types/automation";
 
 export * from "./types";
@@ -27,6 +28,7 @@ class IntegrationCatalogRegistry {
     this.register(googleSheetsIntegration);
     this.register(slackIntegration);
     this.register(gmailIntegration);
+    this.register(socialVideoIntegration);
   }
 
   /**

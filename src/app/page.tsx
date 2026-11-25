@@ -29,21 +29,24 @@ export default function Home() {
           <div className="container mx-auto">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b border-[#222222] pb-8">
               <h2 className="text-sm font-bold uppercase tracking-widest text-[#A0A0A0]">
-                Two core capabilities.
+                Three core capabilities.
               </h2>
               <p className="max-w-md text-[#A0A0A0] mt-4 md:mt-0 font-medium">
-                We build intelligent automation systems and high-performance software solutions.
+                We build intelligent automation systems, custom software, and AI-powered digital marketing growth engines.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
               {[
-                { name: 'AI AUTOMATION', desc: 'AI-powered workflow planning, integration, and business process automation through the Digilo platform.' },
-                { name: 'SOFTWARE DEVELOPMENT', desc: 'Custom websites, web applications, and software solutions built for business scale.' },
+                { name: 'AI AUTOMATION', desc: 'AI-powered workflow planning, API integration, and business process automation through the Digilo platform.' },
+                { name: 'SOFTWARE DEVELOPMENT', desc: 'Custom websites, web applications, SaaS platforms, and software solutions engineered for business scale.' },
+                { name: 'DIGITAL MARKETING', desc: 'AI social video pipelines, automated multi-channel publishing (YouTube, Reels, TikTok), performance ads & SEO.' },
               ].map((cap, i) => (
-                <div key={cap.name} className="group relative p-6 border border-[#222222] bg-[#111111] hover:border-[#C8FF00]/40 rounded-lg transition-all">
-                  <span className="text-[#C8FF00] font-mono text-xs block mb-4">0{i + 1}</span>
-                  <h3 className="text-2xl lg:text-3xl font-bold uppercase tracking-tight mb-3 group-hover:text-[#C8FF00] transition-colors duration-300">{cap.name}</h3>
-                  <p className="text-[#A0A0A0] text-sm font-normal leading-relaxed mb-4">{cap.desc}</p>
+                <div key={cap.name} className="group relative p-6 border border-[#222222] bg-[#111111] hover:border-[#C8FF00]/40 rounded-lg transition-all flex flex-col justify-between">
+                  <div>
+                    <span className="text-[#C8FF00] font-mono text-xs block mb-4">0{i + 1}</span>
+                    <h3 className="text-xl lg:text-2xl font-bold uppercase tracking-tight mb-3 group-hover:text-[#C8FF00] transition-colors duration-300">{cap.name}</h3>
+                    <p className="text-[#A0A0A0] text-sm font-normal leading-relaxed mb-4">{cap.desc}</p>
+                  </div>
                   <div className="h-[1px] w-full bg-[#222222] group-hover:bg-[#C8FF00] transition-colors duration-500"></div>
                 </div>
               ))}

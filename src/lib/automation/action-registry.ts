@@ -99,6 +99,91 @@ export const ACTION_REGISTRY: Record<string, ActionDefinition> = {
         defaultValue: "New inbound lead received from website. Check Google Sheets for details."
       }
     ]
+  },
+  "social_video.generate_script": {
+    id: "social_video.generate_script",
+    name: "Generate Video Script (ChatGPT)",
+    description: "Generates high-converting short/long video script with hooks and scenes.",
+    requiredIntegration: "openai",
+    configFields: [
+      {
+        key: "topic",
+        label: "Video Topic",
+        type: "textarea",
+        required: true,
+        placeholder: "e.g. 3 AI tools to automate your business",
+        defaultValue: "3 AI tools to automate your business"
+      },
+      {
+        key: "format",
+        label: "Video Format",
+        type: "select",
+        required: false,
+        defaultValue: "short_form_9_16",
+        options: [
+          { label: "Short-Form (9:16 Vertical)", value: "short_form_9_16" },
+          { label: "Long-Form (16:9 Landscape)", value: "long_form_16_9" }
+        ]
+      }
+    ]
+  },
+  "social_video.generate_voiceover": {
+    id: "social_video.generate_voiceover",
+    name: "Generate AI Voiceover",
+    description: "Converts the video script into realistic voice narration audio.",
+    requiredIntegration: "social_video",
+    configFields: [
+      {
+        key: "voice",
+        label: "Voice Style",
+        type: "select",
+        required: false,
+        defaultValue: "alloy",
+        options: [
+          { label: "Alloy (Neutral & Clear)", value: "alloy" },
+          { label: "Echo (Energetic)", value: "echo" },
+          { label: "Onyx (Deep Voice)", value: "onyx" }
+        ]
+      }
+    ]
+  },
+  "social_video.render_video": {
+    id: "social_video.render_video",
+    name: "Render Video from Template",
+    description: "Assembles audio, captions, and template visuals into final MP4 video.",
+    requiredIntegration: "social_video",
+    configFields: [
+      {
+        key: "templateStyle",
+        label: "Template Style",
+        type: "select",
+        required: false,
+        defaultValue: "dark_terminal_modern",
+        options: [
+          { label: "Dark Terminal Tech (Digilo Signature)", value: "dark_terminal_modern" },
+          { label: "Kinetic Captions (Viral Style)", value: "kinetic_typography" }
+        ]
+      }
+    ]
+  },
+  "social_video.publish_post": {
+    id: "social_video.publish_post",
+    name: "Auto-Publish to Social Media",
+    description: "Uploads and publishes to YouTube Shorts, Instagram Reels, TikTok, and LinkedIn.",
+    requiredIntegration: "social_video",
+    configFields: [
+      {
+        key: "channels",
+        label: "Social Channels",
+        type: "select",
+        required: true,
+        defaultValue: "youtube_instagram",
+        options: [
+          { label: "YouTube Shorts + Instagram Reels", value: "youtube_instagram" },
+          { label: "All Channels (YouTube, Instagram, TikTok, LinkedIn)", value: "all_channels" }
+        ]
+      }
+    ]
   }
 };
 

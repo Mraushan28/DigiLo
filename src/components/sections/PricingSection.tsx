@@ -10,7 +10,8 @@ import {
   Sparkles,
   Layers,
   Database,
-  Mail
+  Mail,
+  Video
 } from "lucide-react";
 
 export default function PricingSection() {
@@ -38,6 +39,7 @@ export default function PricingSection() {
   const integrations = [
     { name: "Website Webhook", icon: <Zap className="w-5 h-5 text-[#C8FF00]" />, status: "Ready" },
     { name: "OpenAI GPT-4o", icon: <Sparkles className="w-5 h-5 text-[#3B82F6]" />, status: "Integrated" },
+    { name: "YouTube & Social Video", icon: <Video className="w-5 h-5 text-[#C8FF00]" />, status: "Pipeline Ready" },
     { name: "Google Sheets", icon: <Database className="w-5 h-5 text-[#22C55E]" />, status: "OAuth 2.0" },
     { name: "Slack", icon: <MessageSquare className="w-5 h-5 text-[#A855F7]" />, status: "OAuth 2.0" },
     { name: "Gmail", icon: <Mail className="w-5 h-5 text-[#EF4444]" />, status: "Coming Soon" }
