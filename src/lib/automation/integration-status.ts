@@ -61,6 +61,12 @@ export function resolveIntegrationStatus(integrationId: string): IntegrationStat
       status = "not_configured";
       statusLabel = "OAuth Not Configured in .env";
     }
+  } else if (integrationId === "social_video") {
+    const hasKey = typeof process !== "undefined" && Boolean(
+      process.env.NVIDIA_API_KEY || process.env.OPENAI_API_KEY || process.env.YOUTUBE_API_KEY
+    );
+    status = "connected";
+    statusLabel = hasKey ? "Connected (AI Engine Active)" : "Connected (Free Sandbox Mode)";
   } else {
     status = isEnvConfigured ? "not_connected" : "not_configured";
     statusLabel = isEnvConfigured ? "Ready to Connect" : "Not Configured";
@@ -164,6 +170,12 @@ export async function getLiveIntegrationStatusForWorkspace(
         };
       }
     }
+  } else if (integrationId === "social_video") {
+    return {
+      ...baseInfo,
+      status: "connected",
+      statusLabel: "Connected (Free Sandbox Mode)",
+    };
   }
 
   return baseInfo;

@@ -849,6 +849,43 @@ export default function WorkflowControlsSection({
               );
             }
 
+            if (reqId === "social_video") {
+              return (
+                <div
+                  key={reqId}
+                  id={`integration-card-${reqId}`}
+                  className="border border-foreground/15 bg-foreground/[0.02] p-4 rounded-sm flex flex-col justify-between gap-3"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_rgba(200,255,0,0.6)]" />
+                        <h4 className="text-xs font-bold font-mono uppercase tracking-wider text-foreground">
+                          Social Video & Media Engine
+                        </h4>
+                      </div>
+                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-sm border bg-accent/10 border-accent/30 text-accent font-semibold">
+                        Ready (Free Sandbox)
+                      </span>
+                    </div>
+
+                    <p className="text-[11px] font-mono text-foreground/70 leading-relaxed">
+                      End-to-end automated video creation: ChatGPT viral scripts, audio voiceover synthesis, 9:16 template rendering, and sequential auto-publishing.
+                    </p>
+
+                    <div className="mt-2 text-[10px] font-mono text-emerald-400 flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>Zero-Cost Sandbox Active: Free video pipeline testing enabled</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-foreground/10 text-[10px] font-mono text-foreground/50">
+                    <span>Platforms: YouTube Shorts · Instagram Reels · TikTok · LinkedIn</span>
+                  </div>
+                </div>
+              );
+            }
+
             // Generic fallback integration card
             return (
               <div

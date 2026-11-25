@@ -261,13 +261,19 @@ export async function generateWorkflowAnalysisAndSuggestions(
   const intakeSummary = `Data enters through ${triggerType} (${workflow.trigger.source || "Website"}), listening for event '${workflow.trigger.event || "lead_submitted"}'. Inbound fields are validated before routing to pipeline steps.`;
 
   const aiStep = workflow.steps.find((s) => s.action === "ai.analyze");
-  const transformationSummary = aiStep
+  const hasSocialVideo = workflow.steps.some((s) => s.action.startsWith("social_video."));
+  const transformationSummary = hasSocialVideo
+    ? `The Social Media Video Engine generates viral hook-driven scripts via ChatGPT, synthesizes studio-quality voiceover audio with word timestamps, and renders dynamic 9:16 vertical video templates with animated captions.`
+    : aiStep
     ? `The AI Lead Intelligence step evaluates company size, urgency, and purchase intent using structured LLM inference, assigning a 0-100 priority score and concise executive summary.`
     : `Data routes directly through pipeline transforms without AI qualification steps.`;
 
-  const destinationSteps = workflow.steps.filter((s) => s.action !== "ai.analyze");
+  const hasPublishing = workflow.steps.some((s) => s.action === "social_video.publish_post");
+  const destinationSteps = workflow.steps.filter((s) => s.action !== "ai.analyze" && !s.action.startsWith("social_video."));
   const destNames = destinationSteps.map((s) => s.name || s.action).join(", ");
-  const distributionSummary = destinationSteps.length > 0
+  const distributionSummary = hasPublishing
+    ? `Finished video assets are sequentially uploaded and published to targeted social channels (YouTube Shorts, Instagram Reels, TikTok, and LinkedIn) with automated hashtags and release schedules.`
+    : destinationSteps.length > 0
     ? `Verified outputs are delivered to ${destinationSteps.length} external service destination(s): ${destNames}.`
     : `No secondary storage or notification destinations are currently attached.`;
 

@@ -12,7 +12,11 @@ import {
   Trash2, 
   Sliders, 
   Layers, 
-  AlertCircle 
+  AlertCircle,
+  Video,
+  Mic,
+  Film,
+  Share2
 } from "lucide-react";
 
 interface WorkflowStepCardProps {
@@ -52,12 +56,26 @@ export default function WorkflowStepCard({
         return <Mail className="w-5 h-5 text-sky-400" />;
       case "slack.send_message":
         return <MessageSquare className="w-5 h-5 text-fuchsia-400" />;
+      case "social_video.generate_script":
+        return <Video className="w-5 h-5 text-accent" />;
+      case "social_video.generate_voiceover":
+        return <Mic className="w-5 h-5 text-amber-400" />;
+      case "social_video.render_video":
+        return <Film className="w-5 h-5 text-rose-400" />;
+      case "social_video.publish_post":
+        return <Share2 className="w-5 h-5 text-emerald-400" />;
       default:
         return <Layers className="w-5 h-5 text-foreground/70" />;
     }
   };
 
   const getStepCategory = () => {
+    if (step.action.startsWith("social_video.")) {
+      return {
+        badge: "MEDIA & VIDEO",
+        badgeClass: "bg-rose-500/15 border-rose-500/30 text-rose-300",
+      };
+    }
     if (step.action.startsWith("ai.")) {
       return {
         badge: "AI PROCESSING",

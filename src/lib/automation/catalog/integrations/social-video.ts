@@ -21,6 +21,29 @@ export const socialVideoIntegration: IntegrationDefinition = {
   },
   triggers: [
     {
+      id: "schedule",
+      name: "Scheduled Content Trigger",
+      description: "Triggers automated video generation on a recurring schedule or content calendar timer.",
+      requiredIntegration: "social_video",
+      defaultSource: "Content Automation Scheduler",
+      defaultEvent: "scheduled_video_generation",
+      executionAdapter: {
+        n8nNodeType: "n8n-nodes-base.cron",
+        n8nNodeVersion: 1,
+        mapParameters: (triggerConfig) => ({
+          triggerTimes: {
+            item: [
+              {
+                mode: (triggerConfig.mode as string) || "everyDay",
+                hour: 10,
+                minute: 0
+              }
+            ]
+          }
+        })
+      }
+    },
+    {
       id: "social_video.schedule_trigger",
       name: "Content Schedule Trigger",
       description: "Triggers automated video generation on a recurring schedule (e.g. daily at 10 AM) or content calendar event.",
@@ -49,7 +72,7 @@ export const socialVideoIntegration: IntegrationDefinition = {
       id: "social_video.generate_script",
       name: "Generate Video Script (ChatGPT)",
       description: "Uses OpenAI / ChatGPT to generate viral, hook-driven video scripts formatted for short-form (Reels/Shorts/TikTok) or long-form video.",
-      requiredIntegration: "openai",
+      requiredIntegration: "social_video",
       inputSchema: z.object({
         topic: z.string().min(1, "Topic is required"),
         format: z.string().optional(),

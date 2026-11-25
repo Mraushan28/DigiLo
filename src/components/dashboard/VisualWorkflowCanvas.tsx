@@ -19,7 +19,11 @@ import {
   ShieldCheck,
   AlertCircle,
   Hand,
-  Maximize2
+  Maximize2,
+  Video,
+  Mic,
+  Film,
+  Share2
 } from "lucide-react";
 
 interface VisualWorkflowCanvasProps {
@@ -270,6 +274,10 @@ export default function VisualWorkflowCanvas({
   };
 
   const getStepIcon = (action: string) => {
+    if (action === "social_video.generate_script") return <Video className="w-4 h-4 text-accent" />;
+    if (action === "social_video.generate_voiceover") return <Mic className="w-4 h-4 text-amber-400" />;
+    if (action === "social_video.render_video") return <Film className="w-4 h-4 text-rose-400" />;
+    if (action === "social_video.publish_post") return <Share2 className="w-4 h-4 text-emerald-400" />;
     if (action.includes("ai")) return <Sparkles className="w-4 h-4 text-accent" />;
     if (action.includes("sheet")) return <Database className="w-4 h-4 text-emerald-400" />;
     if (action.includes("slack")) return <MessageSquare className="w-4 h-4 text-cyan-400" />;
@@ -278,6 +286,7 @@ export default function VisualWorkflowCanvas({
   };
 
   const getStepBadgeColor = (action: string) => {
+    if (action.startsWith("social_video")) return "bg-rose-500/10 border-rose-500/30 text-rose-400";
     if (action.includes("ai")) return "bg-accent/10 border-accent/30 text-accent";
     if (action.includes("sheet")) return "bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
     if (action.includes("slack")) return "bg-cyan-500/10 border-cyan-500/30 text-cyan-400";
@@ -642,6 +651,137 @@ export default function VisualWorkflowCanvas({
                       type="text"
                       value={(editedConfig.subject as string) || "New Qualified Lead"}
                       onChange={(e) => setEditedConfig({ ...editedConfig, subject: e.target.value })}
+                      className="w-full text-xs font-mono bg-background border border-foreground/20 p-2 rounded-sm focus:outline-none focus:border-accent"
+                    />
+                  </div>
+                </>
+              )}
+
+              {selectedNode.action === "social_video.generate_script" && (
+                <>
+                  <div>
+                    <label className="text-[11px] font-mono font-semibold text-foreground block mb-1">
+                      Video Topic / Hook Subject
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={(editedConfig.topic as string) || "Top 3 AI automations every business needs in 2026 to save 20 hours a week"}
+                      onChange={(e) => setEditedConfig({ ...editedConfig, topic: e.target.value })}
+                      className="w-full text-xs font-mono bg-background border border-foreground/20 p-2.5 rounded-sm focus:outline-none focus:border-accent"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-mono font-semibold text-foreground block mb-1">
+                      Video Format
+                    </label>
+                    <select
+                      value={(editedConfig.format as string) || "short_form_9_16"}
+                      onChange={(e) => setEditedConfig({ ...editedConfig, format: e.target.value })}
+                      className="w-full text-xs font-mono bg-background border border-foreground/20 p-2 rounded-sm focus:outline-none focus:border-accent"
+                    >
+                      <option value="short_form_9_16">Short-Form (9:16 Vertical — Reels / Shorts / TikTok)</option>
+                      <option value="long_form_16_9">Long-Form (16:9 Landscape — YouTube)</option>
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {selectedNode.action === "social_video.generate_voiceover" && (
+                <>
+                  <div>
+                    <label className="text-[11px] font-mono font-semibold text-foreground block mb-1">
+                      Voice Actor Persona
+                    </label>
+                    <select
+                      value={(editedConfig.voice as string) || "alloy"}
+                      onChange={(e) => setEditedConfig({ ...editedConfig, voice: e.target.value })}
+                      className="w-full text-xs font-mono bg-background border border-foreground/20 p-2 rounded-sm focus:outline-none focus:border-accent"
+                    >
+                      <option value="alloy">Alloy (Neutral & Authoritative)</option>
+                      <option value="echo">Echo (Energetic & Dynamic)</option>
+                      <option value="fable">Fable (British Storyteller)</option>
+                      <option value="onyx">Onyx (Deep Corporate Voice)</option>
+                      <option value="nova">Nova (Warm & Friendly)</option>
+                      <option value="shimmer">Shimmer (Clear & Conversational)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-mono font-semibold text-foreground block mb-1">
+                      Narration Language
+                    </label>
+                    <select
+                      value={(editedConfig.language as string) || "en-US"}
+                      onChange={(e) => setEditedConfig({ ...editedConfig, language: e.target.value })}
+                      className="w-full text-xs font-mono bg-background border border-foreground/20 p-2 rounded-sm focus:outline-none focus:border-accent"
+                    >
+                      <option value="en-US">English (US / Global)</option>
+                      <option value="en-IN">English (Indian Accent)</option>
+                      <option value="hi-IN">Hindi (हिन्दी)</option>
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {selectedNode.action === "social_video.render_video" && (
+                <>
+                  <div>
+                    <label className="text-[11px] font-mono font-semibold text-foreground block mb-1">
+                      Motion Template Theme
+                    </label>
+                    <select
+                      value={(editedConfig.templateStyle as string) || "dark_terminal_modern"}
+                      onChange={(e) => setEditedConfig({ ...editedConfig, templateStyle: e.target.value })}
+                      className="w-full text-xs font-mono bg-background border border-foreground/20 p-2 rounded-sm focus:outline-none focus:border-accent"
+                    >
+                      <option value="dark_terminal_modern">Dark Terminal / Neon Tech (Digilo Signature)</option>
+                      <option value="kinetic_typography">Bold Kinetic Typography (Hormozi Style)</option>
+                      <option value="clean_minimalist">Clean Minimalist Business</option>
+                      <option value="podcast_waveform">Podcast / Waveform Overlay</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-mono font-semibold text-foreground block mb-1">
+                      Subtitles / Captions
+                    </label>
+                    <select
+                      value={(editedConfig.subtitles as string) || "animated_captions"}
+                      onChange={(e) => setEditedConfig({ ...editedConfig, subtitles: e.target.value })}
+                      className="w-full text-xs font-mono bg-background border border-foreground/20 p-2 rounded-sm focus:outline-none focus:border-accent"
+                    >
+                      <option value="animated_captions">Animated Word-by-Word Captions (High Retention)</option>
+                      <option value="standard_subtitles">Standard Subtitle Bar</option>
+                      <option value="none">No Subtitles</option>
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {selectedNode.action === "social_video.publish_post" && (
+                <>
+                  <div>
+                    <label className="text-[11px] font-mono font-semibold text-foreground block mb-1">
+                      Target Social Media Channels
+                    </label>
+                    <select
+                      value={(editedConfig.channels as string) || "youtube_instagram"}
+                      onChange={(e) => setEditedConfig({ ...editedConfig, channels: e.target.value })}
+                      className="w-full text-xs font-mono bg-background border border-foreground/20 p-2 rounded-sm focus:outline-none focus:border-accent"
+                    >
+                      <option value="youtube_instagram">YouTube Shorts + Instagram Reels</option>
+                      <option value="all_channels">All Channels (YouTube Shorts, Instagram, TikTok, LinkedIn)</option>
+                      <option value="youtube_only">YouTube Shorts Only</option>
+                      <option value="instagram_only">Instagram Reels Only</option>
+                      <option value="linkedin_only">LinkedIn Video Only</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-mono font-semibold text-foreground block mb-1">
+                      Hashtags
+                    </label>
+                    <input
+                      type="text"
+                      value={(editedConfig.hashtags as string) || "#Automation #AI #Tech #SmallBusiness #Productivity"}
+                      onChange={(e) => setEditedConfig({ ...editedConfig, hashtags: e.target.value })}
                       className="w-full text-xs font-mono bg-background border border-foreground/20 p-2 rounded-sm focus:outline-none focus:border-accent"
                     />
                   </div>

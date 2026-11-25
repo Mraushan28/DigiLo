@@ -35,6 +35,13 @@ export const INTEGRATION_METADATA: Record<string, {
     envKeys: ["SLACK_CLIENT_ID", "SLACK_CLIENT_SECRET"],
     oauthSupported: true
   },
+  social_video: {
+    name: "Social Video & Media Engine",
+    category: "Content & Social Media",
+    description: "Automated video generation pipeline: scriptwriting, voiceover, template rendering, and multi-channel posting.",
+    envKeys: ["OPENAI_API_KEY", "YOUTUBE_API_KEY"],
+    oauthSupported: false
+  },
   webhook: {
     name: "Digilo Webhook",
     category: "Trigger & Ingestion",
@@ -78,6 +85,9 @@ export function resolveIntegrationStatus(integrationId: string): IntegrationStat
     // Client-side initial fallback until /api/automation/integrations responds
     status = "not_connected";
     statusLabel = "Ready to Connect";
+  } else if (integrationId === "social_video") {
+    status = "connected";
+    statusLabel = "Connected (Ready / Free Sandbox)";
   } else {
     status = "not_configured";
     statusLabel = "Not Configured";

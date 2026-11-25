@@ -116,6 +116,71 @@ Example 2: AI Analysis + Save to Google Sheets (User asked to save to Sheets):
   }
 }
 
+Example 3: Social Media Video Pipeline (Script -> Voiceover -> Video Render -> Multi-platform Auto-Publish):
+{
+  "status": "success",
+  "workflow": {
+    "name": "VIRAL SOCIAL VIDEO CREATION & AUTO-PUBLISHING PIPELINE",
+    "description": "Generates viral video script with ChatGPT, synthesizes AI voiceover audio, renders vertical 9:16 template video with animated captions, and auto-publishes to YouTube Shorts and Instagram Reels.",
+    "trigger": {
+      "type": "schedule",
+      "source": "Content Automation Scheduler",
+      "event": "scheduled_video_generation",
+      "description": "Trigger automated video creation on schedule or content event"
+    },
+    "steps": [
+      {
+        "id": "step_1",
+        "type": "action",
+        "action": "social_video.generate_script",
+        "name": "Generate Video Script (ChatGPT)",
+        "description": "Generates hook-driven video script with visual cues",
+        "config": {
+          "topic": "Top 3 AI automations every business needs in 2026 to save 20 hours a week",
+          "format": "short_form_9_16",
+          "tone": "engaging_educational"
+        }
+      },
+      {
+        "id": "step_2",
+        "type": "action",
+        "action": "social_video.generate_voiceover",
+        "name": "Generate AI Voiceover",
+        "description": "Converts script into studio-quality voiceover audio",
+        "config": {
+          "voice": "alloy",
+          "language": "en-US"
+        }
+      },
+      {
+        "id": "step_3",
+        "type": "action",
+        "action": "social_video.render_video",
+        "name": "Render Video from Template",
+        "description": "Assembles audio, kinetic captions, and template into MP4",
+        "config": {
+          "templateStyle": "dark_terminal_modern",
+          "aspectRatio": "9:16",
+          "subtitles": "animated_captions"
+        }
+      },
+      {
+        "id": "step_4",
+        "type": "action",
+        "action": "social_video.publish_post",
+        "name": "Auto-Publish to Social Media",
+        "description": "Sequentially publishes to YouTube Shorts and Instagram Reels",
+        "config": {
+          "channels": "youtube_instagram",
+          "publishingMode": "publish_immediately",
+          "hashtags": "#Automation #AI #Tech #SmallBusiness #Productivity"
+        }
+      }
+    ],
+    "required_integrations": ["social_video"]
+  }
+}
+
 ORDERING & BEST PRACTICES:
 - If AI analysis is used, "ai.analyze" must precede destination steps that reference AI insights.
 - Do NOT include destination steps (Google Sheets or Slack) unless specifically requested by the user.
